@@ -1,0 +1,23 @@
+#sideBar {
+	position:absolute;
+	z-index:1;
+	
+	top:30;
+	left:30;
+	width:400px;
+	height:600px;
+ 	
+ 	background-color:white;
+}
+
+.error {
+	color: #ff0000;
+}
+ 
+.errorblock {
+		color: #000;
+		background-color: #ffEEEE;
+		border: 3px solid #ff0000;
+		padding: 8px;
+		margin: 16px;
+}

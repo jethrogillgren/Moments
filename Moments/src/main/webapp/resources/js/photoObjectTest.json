@@ -1,0 +1,53 @@
+{
+
+	"metadata": {
+		"formatVersion": 3,
+		"type" : "scene"
+	},
+
+	"urlBaseType" : "relativeToHTML",
+
+	"objects": {
+
+		"ground" : {
+			"geometry" : "plane",
+			"materials": [ "basic_gray" ],
+			"position" : [ 0, -10, 0 ],
+			"rotation" : [ -1.57, 0, 0 ],
+			"scale"	   : [ 100, 100, 100 ],
+			"visible"  : true
+		}
+
+	},
+
+	"geometries": {
+
+
+		"plane": {
+			"type"   : "plane",
+			"width"  : 10,
+			"height" : 10,
+			"segmentsWidth"  : 50,
+			"segmentsHeight" : 50
+		}
+
+	},
+
+	"materials": {
+
+		"basic_gray": {
+			"type": "MeshBasicMaterial",
+			"parameters": { "color": 6710886, "wireframe": true }
+		}
+
+
+	},
+
+	"defaults": {
+		"bgcolor": [0,0,0],
+		"bgalpha": 1,
+		"camera": "cam1",
+		"fog": "black"
+	}
+
+}

@@ -1,0 +1,16 @@
+{
+    sceneobject:{
+        mesh:{
+            material:{
+                textures:{
+                    color:'resources/images/default.jpg'
+                }
+            },
+        points:'[-10, 5, -5],[-10, -5, -5],[10, -5, -5],[10, 5, -5]',
+        uv:'[[0, 1],[0, 0],[1, 0],[1, 1]]',
+            compile:'true'
+        },
+        faces: [0, 1, 2, 3],
+        position:'0, 10, -10'
+    }
+}

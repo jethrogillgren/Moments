@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sceneObject>
+	<mesh>
+		<compile>true</compile>
+		<primitive>
+			<type>plane</type>
+			<size>5</size>
+			<material>
+				<textures>
+					<color>resources/images/TestPhoto.jpg</color>
+				</textures>
+			</material>
+			<uv>
+				<projectionMode>cubic</projectionMode>
+				<scale>5, 5, 5</scale>
+			</uv>
+		</primitive>
+		
+	</mesh>
+	<position>0,10,-10</position>
+	<rotation>0, 0, 0</rotation>
+</sceneObject>

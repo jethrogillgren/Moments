@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+	<camera>
+		<position>0, 0, 1</position>
+		<target>0, 0, 0</target>
+		<fov>60</fov>
+	</camera>
+	<sceneObject>
+		<mesh>
+			<primitive>resources/xml/plane1.xml</primitive>
+			<compile>true</compile>
+		</mesh>
+		<position>0,0,-1</position>
+		<rotation>0, 40, 0</rotation>
+	</sceneObject>
+
+	<light>resources/xml/light1.xml</light>
+</scene>

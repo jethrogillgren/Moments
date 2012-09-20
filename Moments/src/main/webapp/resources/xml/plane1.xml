@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<primitive>
+	<type>plane</type>
+	<size>0.5</size>
+	<material>resources/xml/testMaterial1.xml</material>
+	<uv>resources/xml/uvmapper1.xml</uv>
+</primitive>

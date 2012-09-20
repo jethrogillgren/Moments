@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mesh>
+	<primitive>
+		<type>box</type>
+		<size>1, 1, 0.01</size>
+		<material>resources/xml/testMaterial1.xml</material>
+		<uvmapper>resources/xml/uv_cubic1.xml</uvmapper>
+	</primitive>
+	<compile>true</compile>
+</mesh>

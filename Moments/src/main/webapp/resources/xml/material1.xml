@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<material>
+	<color>0.1, 0.8, 0.82</color>
+	<specular>1, 1, 1</specular>
+	<shininess>0.9</shininess>
+	<env_amount>1.0</env_amount>
+	<textures>
+		<color>resources/images/2576-diffuse.jpg</color>
+		<normal>resources/images/2576-normal.jpg</normal>
+		<bump>resources/images/2576-bump.jpg</bump>
+		<envsphere>resources/images/fract_reflections.jpg</envsphere>
+	</textures>
+</material>
