@@ -103,14 +103,46 @@
 				
 				//Test Photo
 				
+				//Create a HTML5 Canvas
+				var canvas = document.createElement( "canvas" );
+				var canvasContext = x.getContext("2d");
+				var img = new Image();
+				img.onload = function(){
+				    canvas.width = img.width;
+				    canvas.height = img.height;
+				    canvasContext.drawImage(img, 0, 0, img.width, img.height);
+				    
+				    var photoMaterial = new THREE.MeshBasicMaterial({
+								//map: new THREE.Texture( canvas )
+								map: new THREE.Texture( x, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping )
+								//color: "0x66CCFF"
+					});
+					
+					photoMaterial.map.needsUpdate = true;
+					console.log("MeshBasicMaterial Created: " + photoMaterial);
+						
+					var photoGeometry = new THREE.PlaneGeometry( 110, 150, 50, 10 );
+						
+					var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
+					photoMesh.position.set( 0, 0, 0 );
+					//photoMesh.scale.set( 10, 10, 10 );
+						
+					scene.add( photoMesh );
+					
+				}
+				img.src = 'resources/images/TestPhoto.jpg';
+				/*
 				var imageLoader = new THREE.ImageLoader();
 				console.log("Created imageLoader: " + imageLoader);
-				var photoImage = imageLoader.load( "resources/images/TestPhoto.jpg" );
+				//var photoImage = imageLoader.load( "resources/images/TestPhoto.jpg" );
 				imageLoader.addEventListener('load', function () {
 						console.log("Image Loaded: " + photoImage);
 						
+						
+						
 						var photoMaterial = new THREE.MeshBasicMaterial({
-								map: new THREE.Texture( photoImage )
+								//map: new THREE.Texture( photoImage )
+								map: new THREE.Texture( photoImage, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping )
 								//color: "0x66CCFF"
 						});
 						photoMaterial.map.needsUpdate = true;
@@ -119,10 +151,12 @@
 						var photoGeometry = new THREE.PlaneGeometry( 110, 150, 50, 10 );
 						
 						var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
+						photoMesh.position.set( 0, 0, 0 );
+						photoMesh.scale.set( 10, 10, 10 );
 						
 						scene.add( photoMesh );
 				});
-				
+				*/
 				
 				// LIGHTS
 
