@@ -1,5 +1,16 @@
-var camera, scene, renderer;
-var geometry, material, mesh;
+//Vars
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var FLOOR = -250;
+var mouseX = 0, mouseY = 0;
+var windowHalfX = window.innerWidth / 2;
+var windowHalfY = window.innerHeight / 2;
+
+var container,stats;
+
+var camera, scene;
+var webglRenderer;
+var mesh, zmesh, geometry;
 
 if (!THREE.Detector.webgl)
 	THREE.Detector.addGetWebGLMessage();
@@ -28,10 +39,15 @@ function showDatGUI() {
 }
 
 function init() {
+	
+	//Mouse Event Listener
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	
+	//Create Camera
+	camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+    camera.position.z = 500;
 
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 1000;
-
+    //Create scene
     scene = new THREE.Scene();
 	
 	var light = new THREE.SpotLight();
@@ -55,14 +71,43 @@ function init() {
 
 }
 
-function animate() {
+function onWindowResize() {
 
-    // note: three.js includes requestAnimationFrame shim
-    requestAnimationFrame( animate );
 
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.02;
+	windowHalfX = window.innerWidth / 2;
+	windowHalfY = window.innerHeight / 2;
 
-    renderer.render( scene, camera );
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	if ( webglRenderer ) webglRenderer.setSize( window.innerWidth, window.innerHeight );
 
 }
+
+function onDocumentMouseMove(event) {
+
+	mouseX = ( event.clientX - windowHalfX );
+	mouseY = ( event.clientY - windowHalfY );
+
+}
+
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	render();
+	stats.update();
+
+}
+
+function render() {
+
+	camera.position.x += ( mouseX - camera.position.x ) * .05;
+	camera.position.y += ( - mouseY - camera.position.y ) * .05;
+
+	camera.lookAt( scene.position );
+
+	if ( has_gl ) webglRenderer.render( scene, camera );
+
+}
+

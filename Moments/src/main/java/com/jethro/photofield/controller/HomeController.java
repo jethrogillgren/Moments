@@ -37,7 +37,7 @@ public class HomeController {
 		model.addAttribute("photo", new Photo() );
 		model.addAttribute("photoToUpdate", photoDao.get( 1 ) );//Testing the SideBar
 		
-		return "webgl_loader_json_objconverter";
+		return "index";
 	}
 	
 	/**

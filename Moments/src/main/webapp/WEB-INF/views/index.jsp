@@ -18,9 +18,9 @@
 <link rel="stylesheet" href="resources/css/home.css" />
 
 </head>
-
+<div id="WebGL"></div>
 <div id="sideBar">
-	<span>New Model</span>
+	<!--  <span>New Model</span>
 	<form:form id="createPhotoForm" method="PUT" commandName="photo" action="rest/Image" enctype="multipart/form-data">
 		<form:errors path="*" cssClass="errorblock" element="div" />
 		<table>
@@ -63,6 +63,7 @@
 			</tr>
 		</table>
 	</form:form>
+	-->
 </div>
 </body>
 

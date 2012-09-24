@@ -64,7 +64,7 @@
 			render_canvas = !has_gl;
 
 			function init() {
-
+				
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
@@ -105,7 +105,7 @@
 				
 				//Create a HTML5 Canvas
 				var canvas = document.createElement( "canvas" );
-				var canvasContext = x.getContext("2d");
+				var canvasContext = canvas.getContext("2d");
 				var img = new Image();
 				img.onload = function(){
 				    canvas.width = img.width;
@@ -113,19 +113,17 @@
 				    canvasContext.drawImage(img, 0, 0, img.width, img.height);
 				    
 				    var photoMaterial = new THREE.MeshBasicMaterial({
-								//map: new THREE.Texture( canvas )
-								map: new THREE.Texture( x, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping )
-								//color: "0x66CCFF"
+								map: new THREE.Texture( canvas )
 					});
 					
 					photoMaterial.map.needsUpdate = true;
 					console.log("MeshBasicMaterial Created: " + photoMaterial);
 						
-					var photoGeometry = new THREE.PlaneGeometry( 110, 150, 50, 10 );
+					var photoGeometry = new THREE.PlaneGeometry( img.width, img.height );
 						
 					var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
-					photoMesh.position.set( 0, 0, 0 );
-					//photoMesh.scale.set( 10, 10, 10 );
+					//photoMesh.position.set( 0, 0, 0 );
+					//photoMesh.scale.set( 1, 1, 1 );
 						
 					scene.add( photoMesh );
 					
@@ -154,7 +152,7 @@
 						photoMesh.position.set( 0, 0, 0 );
 						photoMesh.scale.set( 10, 10, 10 );
 						
-						scene.add( photoMesh );
+						//scene.add( photoMesh );
 				});
 				*/
 				
