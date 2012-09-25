@@ -6,14 +6,15 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var container,stats;
+var container, stats;
 
 var camera, scene;
 var webglRenderer;
 var mesh, zmesh, geometry;
 
-if (!THREE.Detector.webgl)
-	THREE.Detector.addGetWebGLMessage();
+//TODO
+//if (!THREE.Detector.webgl)
+//	THREE.Detector.addGetWebGLMessage();
 
 $(document).ready(function() {
 	init();
@@ -35,7 +36,7 @@ function showDatGUI() {
   gui.add(text, 'title');
   gui.add(text, 'speed', -5, 5);
   gui.add(text, 'displayOutline');
-  gui.add(text, 'explode');
+  //gui.add(text, 'explode');
 }
 
 function init() {
@@ -43,32 +44,87 @@ function init() {
 	//Mouse Event Listener
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	
+	
 	//Create Camera
 	camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
     camera.position.z = 500;
 
+
     //Create scene
     scene = new THREE.Scene();
+	var ground = createGround();
+	scene.add( ground );
+	
+	
+	// LIGHTS
+	var ambient = new THREE.AmbientLight( 0x221100 );
+	scene.add( ambient );
 	
 	var light = new THREE.SpotLight();
     light.position.set( 170, 330, -160 );
     scene.add(light);
+    
+    var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+	directionalLight.position.set( 0, -70, 100 ).normalize();
+	scene.add( directionalLight );
 	
-    geometry = new THREE.CubeGeometry( 200, 200, 200 );
-    material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: true } );
-    mesh = new THREE.Mesh( geometry, material );
-    
-    planeGeometry = new THREE.PlaneGeometry( 200, 200, 1, 1);
-    planeMesh = new THREE.Mesh( planeGeometry, material );
-    
-    scene.add( mesh );
-    scene.add( planeMesh );
+	
+	// RENDERER
+	try {
+		
+		webglRenderer = new THREE.WebGLRenderer();
+		webglRenderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+		webglRenderer.domElement.style.position = "relative";
+		
+		container.appendChild( webglRenderer.domElement );
+		has_gl = 1;
+	}
+		catch (e) {
+	}
+	
+	
+	// STATS
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.top = '0px';
+	stats.domElement.style.zIndex = 100;
+	$( "#WebGL" ).append( stats.domElement );
+	
+}
 
-    renderer = new THREE.CanvasRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+function createGround() {
+	
+	var x = document.createElement( "canvas" );
+	var xc = x.getContext("2d");
+	x.width = x.height = 128;
+	xc.fillStyle = "#fff";
+	xc.fillRect(0, 0, 128, 128);
+	xc.fillStyle = "#000";
+	xc.fillRect(0, 0, 64, 64);
+	xc.fillStyle = "#999";
+	xc.fillRect(32, 32, 32, 32);
+	xc.fillStyle = "#000";
+	xc.fillRect(64, 64, 64, 64);
+	xc.fillStyle = "#555";
+	xc.fillRect(96, 96, 32, 32);
+	
+	var xm = new THREE.MeshBasicMaterial( { map: new THREE.Texture( x, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping ) } );
+	xm.map.needsUpdate = true;
+	xm.map.repeat.set( 10, 10 );
+	
+	geometry = new THREE.PlaneGeometry( 100, 100, 15, 10 );
+	
+	mesh = new THREE.Mesh( geometry, xm );
+	mesh.position.set( 0, FLOOR, 0 );
+	mesh.rotation.x = - Math.PI / 2;
+	mesh.scale.set( 10, 10, 10 );
+	
+	return mesh;
+}
 
-    document.body.appendChild( renderer.domElement );
-
+//Returns a list of all available photos on the server
+function loadImageList() {
+	
 }
 
 function onWindowResize() {
@@ -106,8 +162,8 @@ function render() {
 	camera.position.y += ( - mouseY - camera.position.y ) * .05;
 
 	camera.lookAt( scene.position );
-
-	if ( has_gl ) webglRenderer.render( scene, camera );
+	
+	webglRenderer.render( scene, camera );
 
 }
 
