@@ -40,21 +40,21 @@ function showDatGUI() {
 }
 
 function init() {
-	
-	//Mouse Event Listener
+
+	//Listeners
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	
 	
 	//Create Camera
 	camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
     camera.position.z = 500;
-
-
+	
+	
     //Create scene
     scene = new THREE.Scene();
 	var ground = createGround();
 	scene.add( ground );
-	
+	console.log( createPhotos() );
 	
 	// LIGHTS
 	var ambient = new THREE.AmbientLight( 0x221100 );
@@ -122,8 +122,72 @@ function createGround() {
 	return mesh;
 }
 
-//Returns a list of all available photos on the server
-function loadImageList() {
+//Starts the asyncrous chain of getting photo IDs, getting XML representation, loading the image, and creating the mesh in the scene
+function createPhotos() {
+	//Get the Photo IDs
+	$.ajax({
+		url: "rest/Image/list",
+		success:function(data) {
+			console.log('rest/Image/list server response: ' + data);
+  			var regex = /([\d]+)/g;
+  			var matched = null;
+  			while ( matched = regex.exec(data) ) {
+				getPhotoXML( matched[0] );//Now get the XML Representation
+			}
+  		} 
+	});
+}
+
+//Takes a valid Photo ID and gets the XML Representation on the server
+function getPhotoXML( Id ) {
+
+	$.ajax({
+		url: "rest/Image/" + Id + ".xml",
+		success:function(data) {
+			console.log('rest/Image/' + Id + '.xml server response: ' + data);
+  			var regex = /([\d]+)/g;
+  			var matched = null;
+  			while ( matched = regex.exec(data) ) {
+				result.push( matched[0] );
+			}
+  		} 
+	});
+	
+}
+
+//Turns the Photos XML Representation into a Three.js Mesh, and adds it to the scene
+function getPhotoMesh( xmlRep ) {
+
+	//Extract the Image, Positioning, etc.. Info from the XML
+	
+	//Create the inner Canvas object for the Mesh
+	var canvas = document.createElement( "canvas" );
+	var canvasContext = canvas.getContext("2d");
+	
+	//Load the Image -- TODO Create a placeholder with loading bar
+	var img = new Image();
+	img.onload = function(){
+		canvas.width = img.width;
+	    canvas.height = img.height;
+	    canvasContext.drawImage(img, 0, 0, img.width, img.height);
+	    
+	    var photoMaterial = new THREE.MeshBasicMaterial({
+					map: new THREE.Texture( canvas )
+		});
+		
+		photoMaterial.map.needsUpdate = true;
+		console.log("MeshBasicMaterial Created: " + photoMaterial);
+			
+		var photoGeometry = new THREE.PlaneGeometry( img.width, img.height );
+			
+		var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
+		//photoMesh.position.set( 0, 0, 0 );
+		//photoMesh.scale.set( 1, 1, 1 );
+			
+		scene.add( photoMesh );
+		
+	}
+	img.src = 'resources/images/TestPhoto.jpg';
 	
 }
 
