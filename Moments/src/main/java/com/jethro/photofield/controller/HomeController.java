@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jethro.photofield.dao.PhotoDao;
-import com.jethro.photofield.model.Photo;
+import com.jethro.photofield.model.Photo3;
 
 /**
  * Handles requests for the application home page.
@@ -34,8 +34,8 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 		logger.info("/ - Returning 'home' view");
 		
-		model.addAttribute("photo", new Photo() );
-		model.addAttribute("photoToUpdate", photoDao.get( 1 ) );//Testing the SideBar
+		model.addAttribute("photo", new Photo3() );
+		//model.addAttribute("photoToUpdate", photoDao.get( 1 ) );//Testing the SideBar
 		
 		return "index";
 	}
@@ -60,7 +60,7 @@ public class HomeController {
 	public String createSideBar(Locale locale, Model model) {
 		logger.info("/createSideBar/ - Returning 'createSideBar' view");
 		
-		model.addAttribute("photo", new Photo() );
+		model.addAttribute("photo", new Photo3() );
 
 		return "createSideBar";
 	}

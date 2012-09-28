@@ -22,50 +22,7 @@
 </head>
 <div id="WebGL"></div>
 <div id="sideBar">
-	<!--  <span>New Model</span>
-	<form:form id="createPhotoForm" method="PUT" commandName="photo" action="rest/Image" enctype="multipart/form-data">
-		<form:errors path="*" cssClass="errorblock" element="div" />
-		<table>
-			
-			<tr>
-				<td>Image File :</td>
-				<td><form:input type="file" path="file" /></td>
-				<td><form:errors path="file" cssClass="error" /></td>
-			</tr>
-			
-			<tr>
-				<td colspan="3"><input type="submit" /></td>
-			</tr>
-		</table>
-	</form:form>
-	<hr>
-	<span>Update Existing Model</span>
-	<form:form id="updatePhotoForm" method="POST" commandName="photoToUpdate" action="rest/Image" enctype="multipart/form-data">
-		<form:errors path="*" cssClass="errorblock" element="div" />
-		<table>
-			
-			<tr>
-				<td>Id :</td>
-				<td><form:input path="id" /></td>
-				<td><form:errors path="id" cssClass="error" /></td>
-			</tr>
-			<tr>
-				<td>Position :</td>
-				<td><form:input path="position" /></td>
-				<td><form:errors path="position" cssClass="error" /></td>
-			</tr>
-			<tr>
-				<td>Points :</td>
-				<td><form:input path="mesh.points" /></td>
-				<td><form:errors path="mesh.points" cssClass="error" /></td>
-			</tr>
-			
-			<tr>
-				<td colspan="3"><input type="submit" /></td>
-			</tr>
-		</table>
-	</form:form>
-	-->
+	
 </div>
 </body>
 

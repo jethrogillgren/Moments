@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jethro.photofield.controller.ImageController;
-import com.jethro.photofield.model.Photo;
+import com.jethro.photofield.model.Photo3;
 
 @Repository( "photoDao" )
 //@Transactional
 public class PhotoDaoImpl implements PhotoDao {
+	
 	private static final Logger logger = LoggerFactory.getLogger(PhotoDaoImpl.class);
 	
 	@Autowired
@@ -37,7 +38,7 @@ public class PhotoDaoImpl implements PhotoDao {
 		logger.info( "getIds()" );
 		//List<Photo> photos = sessionFactory.getCurrentSession().createQuery("FROM Photo").list();
 		
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(Photo.class);
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(Photo3.class);
 		ProjectionList proList = Projections.projectionList();
 		proList.add(Projections.property("id"));
 		crit.setProjection(proList);
@@ -51,9 +52,9 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	@Transactional
 	//@ResponseBody
-	public Photo get(Integer id) {
+	public Photo3 get(Integer id) {
 		logger.info( "PhotoDaoImpl.get(" + id + ")" );
-		return (Photo) sessionFactory.getCurrentSession().get( Photo.class, id );
+		return (Photo3) sessionFactory.getCurrentSession().get( Photo3.class, id );
 		
 	}
 
@@ -61,7 +62,7 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	@Transactional
 	//@ResponseBody
-	public void save(Photo photo, MultipartFile file) {
+	public void save(Photo3 photo, MultipartFile file) {
 		logger.info( "PhotoDaoImpl.save(Photo2)  id:" + photo.getId() + "  name:" + photo.getImageName() + "   fileName: " + file.getOriginalFilename() );
 		Session sess = sessionFactory.getCurrentSession();
 		try {
@@ -80,7 +81,7 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	@Transactional
 	//@ResponseBody
-	public void update(Photo photo) {
+	public void update(Photo3 photo) {
 		logger.info( "PhotoDaoImpl.update(Photo2)  id:" + photo.getId() + "  name:" + photo.getImageName() );
 		Session sess = sessionFactory.getCurrentSession();
 		
@@ -96,7 +97,7 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	@Transactional
 	//@ResponseBody
-	public void delete( Photo photo ) {
+	public void delete( Photo3 photo ) {
 		logger.info( "PhotoDaoImpl.delete()" );
 		sessionFactory.getCurrentSession().delete( photo );
 	}

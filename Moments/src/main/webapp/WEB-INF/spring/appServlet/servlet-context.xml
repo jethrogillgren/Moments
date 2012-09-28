@@ -61,6 +61,7 @@
 							<property name="classesToBeBound">
 								<list>
 									<value>com.jethro.photofield.model.Photo</value>
+									<value>com.jethro.photofield.model.Photo3</value>
 								</list>
 							</property>
 						</bean>
@@ -109,6 +110,7 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.jethro.photofield.model.Photo</value>
+				<value>com.jethro.photofield.model.Photo3</value>
 			</list>
 		</property>
 	</bean>

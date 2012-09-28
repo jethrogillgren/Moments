@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jethro.photofield.dao.PhotoDao;
-import com.jethro.photofield.model.Photo;
+import com.jethro.photofield.model.Photo3;
 
 /**
  * Handles requests for the photo DAO.
@@ -48,11 +48,11 @@ public class ImageController {
 	
 	/**
 	 * Return Specific Image
-	 * @throws NotFoundException 
+	 * @throws NotFoundException //TODO
 	 */
 	@RequestMapping(value = "/Image/{id}", method = RequestMethod.GET)
 	//@ResponseBody
-	public Photo getImageById( Locale locale, ModelMap model,
+	public Photo3 getImageById( Locale locale, ModelMap model,
 			HttpServletResponse response,
 			@PathVariable Integer id )  {
 		logger.info("GET /Image/{" + id + "}");
@@ -77,7 +77,7 @@ public class ImageController {
 	 */
 	@RequestMapping(value = "/Image", method = RequestMethod.PUT)
 	@ResponseBody
-	public String create( @Valid Photo photo, BindingResult result,
+	public String create( @Valid Photo3 photo, BindingResult result,
 						@RequestParam("file") MultipartFile file) {
 		logger.info("PUT /Image");
 		photoDao.save( photo, file );
@@ -89,7 +89,7 @@ public class ImageController {
 	 */
 	@RequestMapping(value = "/Image", method = RequestMethod.POST)
 	@ResponseBody
-	public String update( @Valid Photo photo, BindingResult result) {
+	public String update( @Valid Photo3 photo, BindingResult result) {
 		logger.info("POST /Image");
 		
 		photoDao.update( photo );
