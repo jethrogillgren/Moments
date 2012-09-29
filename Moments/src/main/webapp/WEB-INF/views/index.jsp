@@ -21,9 +21,6 @@
 
 </head>
 <div id="WebGL"></div>
-<div id="sideBar">
-	
-</div>
 </body>
 
 </html>

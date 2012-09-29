@@ -54,7 +54,7 @@ function init() {
     scene = new THREE.Scene();
 	var ground = createGround();
 	scene.add( ground );
-	//createAllPhotos();
+	createAllPhotos();
 	
 	// LIGHTS
 	var ambient = new THREE.AmbientLight( 0x221100 );
@@ -70,17 +70,12 @@ function init() {
 	
 	
 	// RENDERER
-	try {
-		
-		webglRenderer = new THREE.WebGLRenderer();
-		webglRenderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-		webglRenderer.domElement.style.position = "relative";
-		
-		container.appendChild( webglRenderer.domElement );
-		has_gl = 1;
-	}
-		catch (e) {
-	}
+	webglRenderer = new THREE.WebGLRenderer( { antialias: true } );
+	webglRenderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+	webglRenderer.domElement.style.position = "relative";
+	
+	$( "#WebGL" ).append( webglRenderer.domElement );
+	has_gl = 1;
 	
 	
 	// STATS
@@ -152,16 +147,20 @@ function createPhotoById( id ) {
 }
 
 
-//Turns the Photos XML Representation into a Three.js Mesh, and adds it to the scene
+//Turns the Photos XML Representation into a Three.Mesh, and adds it to the scene
 function createPhotoByXml( xmlRep ) {
 	console.log( 'createPhotoByXml(' + xmlRep + ')' );
 	
-	//Get the MEtadata from the XML Representation
+	//Get the Metadata from the XML Representation
 	var id = $(xmlRep).find('id').text();
 	var imageName = $(xmlRep).find('imageName').text();
-	var position = $(xmlRep).find('position').text();
-	var rotation = $(xmlRep).find('rotation').text();
-	var scale = $(xmlRep).find('scale').text();
+	
+	var positionArr = getXYZArrFromString( $(xmlRep).find('position').text() );
+	console.log( "positionArr: " + positionArr );
+	var rotationArr = getXYZArrFromString( $(xmlRep).find('rotation').text() );
+	console.log( "rotationArr: " + rotationArr );
+	var scaleArr = getXYZArrFromString( $(xmlRep).find('scale').text() );
+	console.log( "scaleArr: " + scaleArr );
 	
 	//Create the inner Canvas object for the Mesh
 	var canvas = document.createElement( "canvas" );
@@ -184,14 +183,26 @@ function createPhotoByXml( xmlRep ) {
 		var photoGeometry = new THREE.PlaneGeometry( img.width, img.height );
 			
 		var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
-		//photoMesh.position.set( 0, 0, 0 );
-		//photoMesh.scale.set( 1, 1, 1 );
+		photoMesh.position.set( positionArr[0], positionArr[1], positionArr[2]  );
+		//photoMesh.rotation.set( rotationArr[0], rotationArr[1], rotationArr[2] );
+		//photoMesh.scale.set( scaleArr[0], scaleArr[1], scaleArr[2] );
 			
 		scene.add( photoMesh );
 		
 	}
 	img.src = 'rest/ImageData/' + id ;
 	
+}
+
+function getXYZArrFromString( str ) {
+	var pos = [];
+	var regex = /\d+/g;
+	var matched = null;
+	
+	while ( matched = regex.exec(str) ) {
+		pos.push( matched );
+	}
+	return pos;
 }
 
 function onWindowResize() {
