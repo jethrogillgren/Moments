@@ -7,40 +7,183 @@ var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
 var container, stats;
+var datGui;
 
 var camera, scene;
 var webglRenderer;
 var mesh, zmesh, geometry;
+var objects = [];
 
-//TODO
+//TODO 
 //if (!THREE.Detector.webgl)
 //	THREE.Detector.addGetWebGLMessage();
 
 $(document).ready(function() {
+	
 	init();
 	animate();
-	showDatGUI();
+
 });
 
-var FizzyText = function() {
-	this.title = 'dat.gui';
-	this.speed = 0.8;
-	this.displayOutline = false;
-	//this.explode = function() { ... };
- 	// Define render logic ...
- };
 
-function showDatGUI() {
-  var text = new FizzyText();
-  var gui = new dat.GUI();
-  gui.add(text, 'title');
-  gui.add(text, 'speed', -5, 5);
-  gui.add(text, 'displayOutline');
-  //gui.add(text, 'explode');
+//Called when a user clicks a Photo, and deletes/updates the datGui Control Tab
+//DatGUI handles any property changes and passes them to updatePhoto.
+//TODO Refactor out the bug stopping datGUI control the THREE.Vector3 instances
+function addPhotoToDatGUI( photo ) {
+	logObj( 'addPhotoToDatGUI', photo );
+	
+	if( datGui )
+		datGui.destroy();
+	datGui = new dat.GUI();
+	
+	var title = datGui.add( photo, 'Title' );
+	title.onFinishChange(function(value) {
+		updatePhoto( photo );
+	});
+	
+	var caption = datGui.add( photo, 'Caption' );
+	caption.onFinishChange(function(value) {
+		updatePhoto( photo );
+	});
+	
+	photo.XPosition = parseFloat( photo.position.x[0] );
+	var positionX = datGui.add( photo, 'XPosition' ).min(-1000).max(1000).step(1);
+	positionX.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.x[0] = value; //Workaround
+		photo.XPosition = value;
+	});
+	positionX.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.x[0] = value;
+		photo.XPosition = value;
+		updatePhoto( photo );
+	});
+	
+	photo.YPosition = parseFloat( photo.position.y[0] );
+	var positionY = datGui.add( photo, 'YPosition' ).min(-1000).max(1000).step(1);
+	positionY.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.y[0] = value; //Workaround
+		photo.YPosition = value;
+	});
+	positionY.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.y[0] = value;
+		updatePhoto( photo );
+	});
+	
+	photo.ZPosition = parseFloat( photo.position.z[0] );
+	var positionZ = datGui.add( photo, 'ZPosition' ).min(-1000).max(1000).step(1);
+	positionZ.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.z[0] = value; //Workaround
+		photo.ZPosition = value;
+	});
+	positionZ.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.position.z[0] = value;
+		updatePhoto( photo );
+	});
+	
+	photo.XRotation = parseFloat( photo.rotation.x[0] );
+	var rotationX = datGui.add( photo, 'XRotation' ).min(-3.14).max(3.14).step(0.01);
+	rotationX.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.x[0] = value; //Workaround
+		photo.XRotation = value;
+	});
+	rotationX.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.x[0] = value;
+		updatePhoto( photo );
+	});
+	
+	photo.YRotation = parseFloat( photo.rotation.y[0] );
+	var rotationY = datGui.add( photo, 'YRotation' ).min(-3.14).max(3.14).step(0.01);
+	rotationY.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.y[0] = value; //Workaround
+		photo.YRotation = value;
+	});
+	rotationY.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.y[0] = value;
+		updatePhoto( photo );
+	});
+	
+	photo.ZRotation = parseFloat( photo.rotation.z[0] );
+	var rotationZ = datGui.add( photo, 'ZRotation' ).min(-3.14).max(3.14).step(0.01);
+	rotationZ.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.z[0] = value; //Workaround
+		photo.ZRotation = value;
+	});
+	rotationZ.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.rotation.z[0] = value;
+		updatePhoto( photo );
+	});
+	
+	photo.Scale = parseFloat( photo.scale.x[0] );
+	var scale = datGui.add( photo, 'Scale' ).min(0.1).max(2).step(0.1);
+	scale.onChange(function(value) {
+		value =  parseFloat( value );
+		photo.scale.x[0] = value; //Workaround
+		photo.scale.y[0] = value; //Workaround
+		photo.scale.z[0] = value; //Workaround
+		photo.Scale = value;
+	});
+	scale.onFinishChange(function(value) {
+		value =  parseFloat( value );
+		photo.scale.x[0] = value;
+		photo.scale.y[0] = value;
+		photo.scale.z[0] = value;
+		updatePhoto( photo );
+	});
+	
+	// Iterate over all controllers and set update initial values
+  	for (var i in datGui.__controllers) {
+   		datGui.__controllers[i].updateDisplay();
+  }
+}
+
+
+function updatePhoto( photo) {
+	logObj( 'updatePhoto', photo );
+	
+	photoRepresentation = getRepresentationFromPhotoMesh( photo );
+	//var dataStr = "id=1&imageName=Test&imageCaption=Test&position=0, 0, 0&rotation=0, 0, 0&scale=5, 5, 5";
+	
+	$.ajax({
+		url: "rest/Image/",
+		type: "POST",
+		data: photoRepresentation,
+		success:function(data) {
+			console.log('POST rest/Image \t ' + photoRepresentation);
+  			
+  		} 
+	});
+}
+
+function getRepresentationFromPhotoMesh( photo ) {
+	logObj( "getRepresentationFromPhotoMesh", photo );
+	var results = {}; 
+	
+	results.id = photo.photoId;
+	results.imageName = photo.Title;
+	results.imageCaption = photo.Caption;
+	results.position = photo.position.x[0] + ', ' +photo.position.y[0] + ', ' +photo.position.z[0] + ', ';
+	results.rotation = photo.rotation.x[0] + ', ' +photo.rotation.y[0] + ', ' +photo.rotation.z[0] + ', ';
+	results.scale = photo.scale.x[0] + ', ' +photo.scale.y[0] + ', ' +photo.scale.z[0] + ', ';
+	
+	//console.log("TEST:  " + photo.position);
+	
+	return results;
 }
 
 function init() {
-
+	console.log( 'init' );
 	//Listeners
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'click', onDocumentMouseClick, false );
@@ -90,7 +233,7 @@ function init() {
 }
 
 function createGround() {
-	
+	console.log( 'createGround' )
 	var x = document.createElement( "canvas" );
 	var xc = x.getContext("2d");
 	x.width = x.height = 128;
@@ -138,7 +281,8 @@ function createAllPhotos() {
 
 //Creates a photo from its ID.
 function createPhotoById( id ) {
-	console.log( 'createPhotoById(' + id + ')' );
+	logObj( 'createPhotoById', id );
+	
 	//Get the Photo ID
 	$.ajax({
 		url: "rest/Image/" + id + ".xml",
@@ -151,11 +295,12 @@ function createPhotoById( id ) {
 
 //Turns the Photos XML Representation into a Three.Mesh, and adds it to the scene
 function createPhotoByXml( xmlRep ) {
-	console.log( 'createPhotoByXml(' + xmlRep + ')' );
+	logObj( 'createPhotoByXml', xmlRep );
 	
 	//Get the Metadata from the XML Representation
 	var id = $(xmlRep).find('id').text();
 	var imageName = $(xmlRep).find('imageName').text();
+	var imageCaption = $(xmlRep).find('imageCaption').text();
 	var positionArr = getXYZArrFromString( $(xmlRep).find('position').text() );
 	var rotationArr = getXYZArrFromString( $(xmlRep).find('rotation').text() );
 	var scaleArr = getXYZArrFromString( $(xmlRep).find('scale').text() );
@@ -182,7 +327,12 @@ function createPhotoByXml( xmlRep ) {
 		photoMesh.position.set( positionArr[0], positionArr[1], positionArr[2]  );
 		photoMesh.rotation.set( rotationArr[0], rotationArr[1], rotationArr[2] );
 		photoMesh.scale.set( scaleArr[0], scaleArr[1], scaleArr[2] );
-			
+		photoMesh.photoId = id;
+		photoMesh.Title = imageName;
+		photoMesh.Caption = imageCaption;
+		
+		
+		objects.push( photoMesh );
 		scene.add( photoMesh );
 		
 	}
@@ -191,15 +341,17 @@ function createPhotoByXml( xmlRep ) {
 }
 
 function getAllPhotoObjects() {
-	//TODO
+	return objects;
 }
 function getPhotoObject( id ) {
 	//TODO
 }
 
 function getXYZArrFromString( str ) {
+	logObj( "getXYZArrFromString", str );
+	
 	var pos = [];
-	var regex = /\d+/g;
+	var regex = /[^,]+/g;
 	var matched = null;
 	
 	while ( matched = regex.exec(str) ) {
@@ -207,9 +359,13 @@ function getXYZArrFromString( str ) {
 	}
 	return pos;
 }
+function getStringFromXYZArr( arr ) {
+	logObj( "getStringFromXYZArr", arr );
+	return "5, 5, 5";
+}
 
 function onWindowResize() {
-
+	console.log( "onWindowResize" );
 
 	windowHalfX = window.innerWidth / 2;
 	windowHalfY = window.innerHeight / 2;
@@ -226,12 +382,39 @@ function onDocumentMouseMove(event) {
 	mouseY = ( event.clientY - windowHalfY );
 }
 
-//TODO http://jsfiddle.net/jdias/KYnyC/
+
+
 function onDocumentMouseClick(event) {
-	console.log("onDocumentMouseClick");
-	var ray = new THREE.Ray( camera.position, direction, near, far );
-	ray.intersectObjects( getAllPhotoObjects() );
+	logObj( "onDocumentMouseClick", event );
+	
+	event.preventDefault();
+	
+    var mouse3D = new THREE.Vector3(
+   		(event.clientX / window.innerWidth) * 2 - 1,
+    	-(event.clientY / window.innerHeight) * 2 + 1,
+    	0.5
+    );
+    
+    var projector = new THREE.Projector();
+    projector.unprojectVector(mouse3D, camera);
+    
+    var ray = new THREE.Ray( camera.position, mouse3D.subSelf(camera.position).normalize() );
+	var intersects = ray.intersectObjects( getAllPhotoObjects() );
+	if ( intersects.length > 0 ) {
+		selectPhotoByMesh( intersects[0].object );
+	}
 }
+
+function selectPhotoById( id )  {
+	logObj( "selectPhotoById", id );
+}
+function selectPhotoByMesh( selectedMesh )  {
+	logObj("selectPhotoByMesh", selectedMesh);
+	
+	addPhotoToDatGUI( selectedMesh );
+}
+
+
 
 function animate() {
 
@@ -240,6 +423,11 @@ function animate() {
 	render();
 	stats.update();
 
+}
+
+function logObj( Str, Obj) {
+	console.log( Str + ' :' );
+	console.log( Obj );
 }
 
 function render() {

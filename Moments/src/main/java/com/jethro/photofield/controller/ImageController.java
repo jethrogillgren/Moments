@@ -168,7 +168,7 @@ public class ImageController {
 	@RequestMapping(value = "/Image", method = RequestMethod.POST)
 	@ResponseBody
 	public String update( @Valid Photo3 photo, BindingResult result) {
-		logger.info("POST /Image");
+		logger.info("POST /Image recieved the photo update with Position: " + photo.getPosition() );
 		
 		photoDao.update( photo );
 		return "{success:true}";

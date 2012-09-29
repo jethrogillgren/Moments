@@ -43,26 +43,13 @@ public class HomeController {
 	/**
 	 * Returns the Update Image Sidebar, with the specified model as a form backing object
 	 */
-	@RequestMapping(value = "/updateSideBar/{modelid}", method = RequestMethod.GET)
-	public String updateSideBar(Locale locale, Model model,
-			@PathVariable Integer modelid) {
-		logger.info("/updateSideBar/" + modelid + " - Returning 'updateSideBar' view");
+	@RequestMapping(value = "/TEST", method = RequestMethod.GET)
+	public String updateSideBar(Locale locale, Model model ) {
+		logger.info("/TEST/ Controller Called");
 		
-		model.addAttribute("photoToUpdate", photoDao.get( modelid ) );
+		//model.addAttribute("photoToUpdate", photoDao.get( modelid ) );
 
-		return "updateSideBar";
-	}
-	
-	/**
-	 * Returns the Create Image Sidebar, with the specified model as a form backing object
-	 */
-	@RequestMapping(value = "/createSideBar", method = RequestMethod.GET)
-	public String createSideBar(Locale locale, Model model) {
-		logger.info("/createSideBar/ - Returning 'createSideBar' view");
-		
-		model.addAttribute("photo", new Photo3() );
-
-		return "createSideBar";
+		return "draganddroptest";
 	}
 	
 }
