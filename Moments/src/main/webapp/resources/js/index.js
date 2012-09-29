@@ -43,6 +43,8 @@ function init() {
 
 	//Listeners
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'click', onDocumentMouseClick, false );
+	//document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 	
 	
 	//Create Camera
@@ -154,13 +156,9 @@ function createPhotoByXml( xmlRep ) {
 	//Get the Metadata from the XML Representation
 	var id = $(xmlRep).find('id').text();
 	var imageName = $(xmlRep).find('imageName').text();
-	
 	var positionArr = getXYZArrFromString( $(xmlRep).find('position').text() );
-	console.log( "positionArr: " + positionArr );
 	var rotationArr = getXYZArrFromString( $(xmlRep).find('rotation').text() );
-	console.log( "rotationArr: " + rotationArr );
 	var scaleArr = getXYZArrFromString( $(xmlRep).find('scale').text() );
-	console.log( "scaleArr: " + scaleArr );
 	
 	//Create the inner Canvas object for the Mesh
 	var canvas = document.createElement( "canvas" );
@@ -176,22 +174,27 @@ function createPhotoByXml( xmlRep ) {
 	    var photoMaterial = new THREE.MeshBasicMaterial({
 					map: new THREE.Texture( canvas )
 		});
-		
 		photoMaterial.map.needsUpdate = true;
-		console.log("MeshBasicMaterial Created: " + photoMaterial);
-			
+		
 		var photoGeometry = new THREE.PlaneGeometry( img.width, img.height );
 			
 		var photoMesh = new THREE.Mesh( photoGeometry, photoMaterial );
 		photoMesh.position.set( positionArr[0], positionArr[1], positionArr[2]  );
-		//photoMesh.rotation.set( rotationArr[0], rotationArr[1], rotationArr[2] );
-		//photoMesh.scale.set( scaleArr[0], scaleArr[1], scaleArr[2] );
+		photoMesh.rotation.set( rotationArr[0], rotationArr[1], rotationArr[2] );
+		photoMesh.scale.set( scaleArr[0], scaleArr[1], scaleArr[2] );
 			
 		scene.add( photoMesh );
 		
 	}
 	img.src = 'rest/ImageData/' + id ;
 	
+}
+
+function getAllPhotoObjects() {
+	//TODO
+}
+function getPhotoObject( id ) {
+	//TODO
 }
 
 function getXYZArrFromString( str ) {
@@ -219,10 +222,15 @@ function onWindowResize() {
 }
 
 function onDocumentMouseMove(event) {
-
 	mouseX = ( event.clientX - windowHalfX );
 	mouseY = ( event.clientY - windowHalfY );
+}
 
+//TODO http://jsfiddle.net/jdias/KYnyC/
+function onDocumentMouseClick(event) {
+	console.log("onDocumentMouseClick");
+	var ray = new THREE.Ray( camera.position, direction, near, far );
+	ray.intersectObjects( getAllPhotoObjects() );
 }
 
 function animate() {
