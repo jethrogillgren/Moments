@@ -54,7 +54,7 @@ function init() {
     scene = new THREE.Scene();
 	var ground = createGround();
 	scene.add( ground );
-	console.log( createPhotos() );
+	//createAllPhotos();
 	
 	// LIGHTS
 	var ambient = new THREE.AmbientLight( 0x221100 );
@@ -123,42 +123,45 @@ function createGround() {
 }
 
 //Starts the asyncrous chain of getting photo IDs, getting XML representation, loading the image, and creating the mesh in the scene
-function createPhotos() {
+function createAllPhotos() {
+	console.log( 'createAllPhotos()' );
 	//Get the Photo IDs
 	$.ajax({
 		url: "rest/Image/list",
 		success:function(data) {
-			console.log('rest/Image/list server response: ' + data);
+			console.log('GET rest/Image/list \t ' + data);
   			var regex = /([\d]+)/g;
   			var matched = null;
   			while ( matched = regex.exec(data) ) {
-				getPhotoXML( matched[0] );//Now get the XML Representation
+				createPhotoById( matched[0] );//Now get the XML Representation
 			}
   		} 
 	});
 }
 
-//Takes a valid Photo ID and gets the XML Representation on the server
-function getPhotoXML( Id ) {
-
+//Creates a photo from its ID.
+function createPhotoById( id ) {
+	console.log( 'createPhotoById(' + id + ')' );
+	//Get the Photo ID
 	$.ajax({
-		url: "rest/Image/" + Id + ".xml",
+		url: "rest/Image/" + id + ".xml",
 		success:function(data) {
-			console.log('rest/Image/' + Id + '.xml server response: ' + data);
-  			var regex = /([\d]+)/g;
-  			var matched = null;
-  			while ( matched = regex.exec(data) ) {
-				result.push( matched[0] );
-			}
-  		} 
+			createPhotoByXml(data);
+  		}
 	});
-	
 }
+
 
 //Turns the Photos XML Representation into a Three.js Mesh, and adds it to the scene
-function getPhotoMesh( xmlRep ) {
-
-	//Extract the Image, Positioning, etc.. Info from the XML
+function createPhotoByXml( xmlRep ) {
+	console.log( 'createPhotoByXml(' + xmlRep + ')' );
+	
+	//Get the MEtadata from the XML Representation
+	var id = $(xmlRep).find('id').text();
+	var imageName = $(xmlRep).find('imageName').text();
+	var position = $(xmlRep).find('position').text();
+	var rotation = $(xmlRep).find('rotation').text();
+	var scale = $(xmlRep).find('scale').text();
 	
 	//Create the inner Canvas object for the Mesh
 	var canvas = document.createElement( "canvas" );
@@ -187,7 +190,7 @@ function getPhotoMesh( xmlRep ) {
 		scene.add( photoMesh );
 		
 	}
-	img.src = 'resources/images/TestPhoto.jpg';
+	img.src = 'rest/ImageData/' + id ;
 	
 }
 

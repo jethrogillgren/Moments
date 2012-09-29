@@ -1,10 +1,17 @@
 package com.jethro.photofield.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Locale;
 
 import javassist.NotFoundException;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -47,7 +54,7 @@ public class ImageController {
 	}
 	
 	/**
-	 * Return Specific Image
+	 * Return Specific Image Representation
 	 * @throws NotFoundException //TODO
 	 */
 	@RequestMapping(value = "/Image/{id}", method = RequestMethod.GET)
@@ -71,6 +78,77 @@ public class ImageController {
 		//Photo testPhoto = new Photo();
 		//return testPhoto;
 	}
+	
+	/**
+	 * Return Specific Image's Data
+	 * @throws NotFoundException //TODO Handle Exceptions nicely. Custom 404 & response codes coded better?
+	 * 
+	 */
+	@RequestMapping("/ImageData/{id}")
+    @ResponseBody
+    public void getImageDataById( HttpServletResponse response,
+    		@PathVariable Integer id ) {
+		logger.info("GET /ImageData/{" + id + "}");
+		
+		if ( id == null ) {
+			logger.info("GET /Image/{" + id + "} - ID is Invalid");
+			
+			try {
+				response.sendError(404, "Photo Data with ID " + id + "was not found");
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} else {
+			
+			byte[] bytes = null;
+			try {
+				
+				Blob blob = photoDao.get( id ).getFile();
+				bytes = blob.getBytes( 1, (int) blob.length() );
+				response.setContentType("image/jpeg");
+				response.setContentLength( bytes.length );
+				
+				ServletOutputStream out = response.getOutputStream();
+				out.write(bytes);
+				out.flush();  
+				 
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				try {
+					response.sendError(404, "Photo Data with ID " + id + "was not found");
+					
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				try {
+					response.sendError(404, "Photo Data with ID " + id + "was not found");
+					
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (NullPointerException e) {
+				// TODO Auto-generated catch block
+				try {
+					response.sendError(404, "Photo Data with ID " + id + "was not found");
+					
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				e.printStackTrace();
+				
+			}
+		}
+    }
 	
 	/**
 	 * Create a new Image
