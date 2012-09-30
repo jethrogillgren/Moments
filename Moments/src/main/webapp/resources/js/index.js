@@ -22,7 +22,7 @@ $(document).ready(function() {
 	
 	init();
 	animate();
-
+	//$('#help-modal-content').modal();
 });
 
 
@@ -182,12 +182,44 @@ function getRepresentationFromPhotoMesh( photo ) {
 	return results;
 }
 
+function onDragEnter(e) {
+	console.log('Drag Enter');
+ 	e.stopPropagation();
+  	e.preventDefault();
+}
+
+function onDragOver(e) {
+	console.log('Drag Over');
+  	e.stopPropagation();
+  	e.preventDefault();
+  //dropbox.addClassName('rounded');
+}
+
+function onDragLeave(e) {
+	console.log('Drag Leave');
+  	e.stopPropagation();
+  	e.preventDefault();
+  //dropbox.removeClassName('rounded');
+}
+
+function onDrop(e) {
+	console.log('Drag Drop');
+	e.stopPropagation();
+	e.preventDefault();
+}
+
 function init() {
 	console.log( 'init' );
+	
 	//Listeners
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'click', onDocumentMouseClick, false );
-	//document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+	
+	var dropBox = document.getElementById( 'DragDropImg' );
+	dropBox.addEventListener('dragenter', onDragEnter, false);
+	dropBox.addEventListener('dragover', onDragOver, false);
+	dropBox.addEventListener('dragleave', onDragLeave, false);
+	dropBox.addEventListener('drop', onDrop, false);
 	
 	
 	//Create Camera
