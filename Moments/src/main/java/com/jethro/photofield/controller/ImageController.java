@@ -157,8 +157,8 @@ public class ImageController {
 	@ResponseBody
 	public String create( @Valid Photo3 photo, BindingResult result,
 						@RequestParam("file") MultipartFile file) {
-		logger.info("PUT /Image");
-		photoDao.save( photo, file );
+		logger.info("PUT /Image : " + photo.getImageName() );
+		//photoDao.save( photo, file );
 		return "{success:true}";
 	}
 	

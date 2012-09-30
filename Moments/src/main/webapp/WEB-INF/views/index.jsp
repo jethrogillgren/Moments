@@ -36,7 +36,11 @@
 	
 	<div id="DragDropDiv" >
 		<img id="DragDropImg" src="resources/images/Transparent.png" />
+		<!-- <form id="FileUploadForm" method="PUT" action="rest/Image/" enctype="multipart/form-data">
+			<input type="file" name="file">
+		</form> -->
 	</div>
+
 	
 </div>
 </body>

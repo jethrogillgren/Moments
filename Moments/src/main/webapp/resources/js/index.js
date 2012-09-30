@@ -166,6 +166,36 @@ function updatePhoto( photo) {
 	});
 }
 
+function uploadNewPhoto( imageFile ) {
+	logObj( 'uploadNewPhoto', imageFile );
+	
+	var options = { 
+        target:        '#FileUploadForm'   // target element(s) to be updated with server response 
+        	
+        }
+    };
+    
+	
+	/*
+	var dataStr = "imageName=" + imageFile.name;
+	
+	$.ajax({
+		url: "rest/Image/",
+		type: "PUT",
+		contentType: "multipart/form-data",
+		data: {
+			//imageName: imageFile.name,
+        	file: imageFile
+     	},
+     	processData: false,
+		success:function(data) {
+			console.log('PUT rest/Image \t ' + imageFile);
+  			
+  		} 
+	});*/
+}
+
+
 function getRepresentationFromPhotoMesh( photo ) {
 	logObj( "getRepresentationFromPhotoMesh", photo );
 	var results = {}; 
@@ -182,30 +212,46 @@ function getRepresentationFromPhotoMesh( photo ) {
 	return results;
 }
 
-function onDragEnter(e) {
-	console.log('Drag Enter');
+function onDrag(e) {
  	e.stopPropagation();
   	e.preventDefault();
 }
 
-function onDragOver(e) {
-	console.log('Drag Over');
-  	e.stopPropagation();
-  	e.preventDefault();
-  //dropbox.addClassName('rounded');
-}
-
-function onDragLeave(e) {
-	console.log('Drag Leave');
-  	e.stopPropagation();
-  	e.preventDefault();
-  //dropbox.removeClassName('rounded');
-}
-
 function onDrop(e) {
-	console.log('Drag Drop');
+	console.log('Dropped!');
 	e.stopPropagation();
 	e.preventDefault();
+	
+	// Only process image files. 
+	var imageType = /image.*/;
+	
+	var readFileSize = 0;
+	
+	var files = e.dataTransfer.files;
+	
+	for(var i=0, len=files.length; i < len; i++ ) {
+		
+		var file = files[i];
+		readFileSize += file.fileSize;
+		
+		var reader = new FileReader();
+		reader.onerror = function(e) {
+			alert('Error code: ' + e.target.error);
+		};
+		// Create a closure to capture the file information. 
+		reader.onload = (function( imageFile ) {
+			logObj( "File Loaded", imageFile );
+			uploadNewPhoto( imageFile );
+		})(file);
+		
+		if (file.type.match(imageType)) {
+			reader.readAsDataURL(file);
+		} else {
+			console.log('Not An Image!');
+		}
+	}
+
+	
 }
 
 function init() {
@@ -216,9 +262,9 @@ function init() {
 	document.addEventListener( 'click', onDocumentMouseClick, false );
 	
 	var dropBox = document.getElementById( 'DragDropImg' );
-	dropBox.addEventListener('dragenter', onDragEnter, false);
-	dropBox.addEventListener('dragover', onDragOver, false);
-	dropBox.addEventListener('dragleave', onDragLeave, false);
+	dropBox.addEventListener('dragenter', onDrag, false);
+	dropBox.addEventListener('dragover', onDrag, false);
+	dropBox.addEventListener('dragleave', onDrag, false);
 	dropBox.addEventListener('drop', onDrop, false);
 	
 	
