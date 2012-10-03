@@ -151,13 +151,13 @@ public class ImageController {
     }
 	
 	/**
-	 * Create a new Image
+	 * Create a new Image TODO Validation of image type
 	 */
-	@RequestMapping(value = "/Image", method = RequestMethod.PUT)
+	@RequestMapping(value = "/Image", method = RequestMethod.POST)
 	@ResponseBody
 	public String create( @Valid Photo3 photo, BindingResult result,
-						@RequestParam("file") MultipartFile file) {
-		logger.info("PUT /Image : " + photo.getImageName() );
+				@RequestParam("images") MultipartFile file) {
+		logger.info("POST /Image :  imageName:" + photo.getImageName() + " File Length " + file.getSize() );
 		//photoDao.save( photo, file );
 		return "{success:true}";
 	}
@@ -165,10 +165,11 @@ public class ImageController {
 	/**
 	 * Update the Image
 	 */
-	@RequestMapping(value = "/Image", method = RequestMethod.POST)
+	@RequestMapping(value = "/Image/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public String update( @Valid Photo3 photo, BindingResult result) {
-		logger.info("POST /Image recieved the photo update with Position: " + photo.getPosition() );
+	public String update( @Valid Photo3 photo, BindingResult result,
+				@PathVariable Integer id) {
+		logger.info("POST /Image/" + id + " recieved the photo update with Position: " + photo.getPosition() );
 		
 		photoDao.update( photo );
 		return "{success:true}";

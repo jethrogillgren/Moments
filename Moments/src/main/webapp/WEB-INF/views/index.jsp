@@ -21,9 +21,16 @@
 </head>
 <body>
 <div id="Moments">
-
+	
+	<!-- Invisible overlay with high ZIndex. Used to allow Drag & Drop of files into the window -->
+	<div id="DragDropDiv" >
+		<img id="DragDropImg" src="resources/images/Transparent.png" />
+	</div>
+	
+	<!-- Container for WebGL. 100%*100%, low zindex. -->
 	<div id="WebGL"></div>
 	
+	<!-- Initially hidden Div, containing instructions etc... Shown on page load -->
 	<div id="help-modal-content">
 		<h3>Moments</h3>
 		<p>TODO Add the Help Pop-Up Page's Text!</p>
@@ -34,12 +41,7 @@
 		<p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
 	</div>
 	
-	<div id="DragDropDiv" >
-		<img id="DragDropImg" src="resources/images/Transparent.png" />
-		<!-- <form id="FileUploadForm" method="PUT" action="rest/Image/" enctype="multipart/form-data">
-			<input type="file" name="file">
-		</form> -->
-	</div>
+	
 
 	
 </div>

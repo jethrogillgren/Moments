@@ -46,96 +46,96 @@ function addPhotoToDatGUI( photo ) {
 		updatePhoto( photo );
 	});
 	
-	photo.XPosition = parseFloat( photo.position.x[0] );
+	photo.XPosition = parseAndRoundFloat( photo.position.x[0] );
 	var positionX = datGui.add( photo, 'XPosition' ).min(-1000).max(1000).step(1);
 	positionX.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.x[0] = value; //Workaround
 		photo.XPosition = value;
 	});
 	positionX.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.x[0] = value;
 		photo.XPosition = value;
 		updatePhoto( photo );
 	});
 	
-	photo.YPosition = parseFloat( photo.position.y[0] );
+	photo.YPosition = parseAndRoundFloat( photo.position.y[0] );
 	var positionY = datGui.add( photo, 'YPosition' ).min(-1000).max(1000).step(1);
 	positionY.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.y[0] = value; //Workaround
 		photo.YPosition = value;
 	});
 	positionY.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.y[0] = value;
 		updatePhoto( photo );
 	});
 	
-	photo.ZPosition = parseFloat( photo.position.z[0] );
+	photo.ZPosition = parseAndRoundFloat( photo.position.z[0] );
 	var positionZ = datGui.add( photo, 'ZPosition' ).min(-1000).max(1000).step(1);
 	positionZ.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.z[0] = value; //Workaround
 		photo.ZPosition = value;
 	});
 	positionZ.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.position.z[0] = value;
 		updatePhoto( photo );
 	});
 	
-	photo.XRotation = parseFloat( photo.rotation.x[0] );
+	photo.XRotation = parseAndRoundFloat( photo.rotation.x[0] );
 	var rotationX = datGui.add( photo, 'XRotation' ).min(-3.14).max(3.14).step(0.01);
 	rotationX.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.x[0] = value; //Workaround
 		photo.XRotation = value;
 	});
 	rotationX.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.x[0] = value;
 		updatePhoto( photo );
 	});
 	
-	photo.YRotation = parseFloat( photo.rotation.y[0] );
+	photo.YRotation = parseAndRoundFloat( photo.rotation.y[0] );
 	var rotationY = datGui.add( photo, 'YRotation' ).min(-3.14).max(3.14).step(0.01);
 	rotationY.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.y[0] = value; //Workaround
 		photo.YRotation = value;
 	});
 	rotationY.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.y[0] = value;
 		updatePhoto( photo );
 	});
 	
-	photo.ZRotation = parseFloat( photo.rotation.z[0] );
+	photo.ZRotation = parseAndRoundFloat( photo.rotation.z[0] );
 	var rotationZ = datGui.add( photo, 'ZRotation' ).min(-3.14).max(3.14).step(0.01);
 	rotationZ.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.z[0] = value; //Workaround
 		photo.ZRotation = value;
 	});
 	rotationZ.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.rotation.z[0] = value;
 		updatePhoto( photo );
 	});
 	
-	photo.Scale = parseFloat( photo.scale.x[0] );
+	photo.Scale = parseAndRoundFloat( photo.scale.x[0] );
 	var scale = datGui.add( photo, 'Scale' ).min(0.1).max(2).step(0.1);
 	scale.onChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.scale.x[0] = value; //Workaround
 		photo.scale.y[0] = value; //Workaround
 		photo.scale.z[0] = value; //Workaround
 		photo.Scale = value;
 	});
 	scale.onFinishChange(function(value) {
-		value =  parseFloat( value );
+		value =  parseAndRoundFloat( value );
 		photo.scale.x[0] = value;
 		photo.scale.y[0] = value;
 		photo.scale.z[0] = value;
@@ -148,6 +148,11 @@ function addPhotoToDatGUI( photo ) {
   }
 }
 
+function parseAndRoundFloat( num ) {
+	var result = Math.round(num*Math.pow(10,2))/Math.pow(10,2);
+	return result;
+}
+
 
 function updatePhoto( photo) {
 	logObj( 'updatePhoto', photo );
@@ -156,7 +161,7 @@ function updatePhoto( photo) {
 	//var dataStr = "id=1&imageName=Test&imageCaption=Test&position=0, 0, 0&rotation=0, 0, 0&scale=5, 5, 5";
 	
 	$.ajax({
-		url: "rest/Image/",
+		url: "rest/Image/" + photo.photoId,
 		type: "POST",
 		data: photoRepresentation,
 		success:function(data) {
@@ -164,35 +169,6 @@ function updatePhoto( photo) {
   			
   		} 
 	});
-}
-
-function uploadNewPhoto( imageFile ) {
-	logObj( 'uploadNewPhoto', imageFile );
-	
-	var options = { 
-        target:        '#FileUploadForm'   // target element(s) to be updated with server response 
-        	
-        }
-    };
-    
-	
-	/*
-	var dataStr = "imageName=" + imageFile.name;
-	
-	$.ajax({
-		url: "rest/Image/",
-		type: "PUT",
-		contentType: "multipart/form-data",
-		data: {
-			//imageName: imageFile.name,
-        	file: imageFile
-     	},
-     	processData: false,
-		success:function(data) {
-			console.log('PUT rest/Image \t ' + imageFile);
-  			
-  		} 
-	});*/
 }
 
 
@@ -250,8 +226,31 @@ function onDrop(e) {
 			console.log('Not An Image!');
 		}
 	}
+}
 
-	
+function uploadNewPhoto( imageFile ) {
+	logObj( 'uploadNewPhoto', imageFile );
+    
+    var formdata = false;
+    if (window.FormData) {
+        formdata = new FormData();
+        formdata.append( "images", imageFile);
+        formdata.append( "imageName", imageFile.name );
+        $.ajax({  
+	  		url: 'rest/Image',
+	        type: "POST",
+	        data: formdata,
+	        processData: false,
+	        contentType: false,
+	        complete : function ( data, textStatus, jqXHR ) {
+	            
+	            alert(' Files Uploaded \nResponse: \t' + data ); 
+	        }  
+	    });
+	    
+    } else {
+    	alert( "Browser doesn't have FormData class!!" ); //TODO Bail out, or check this early and provide fallback option
+    }
 }
 
 function init() {
