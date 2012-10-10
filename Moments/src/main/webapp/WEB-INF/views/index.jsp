@@ -16,7 +16,14 @@
 <script type="text/javascript" src="resources/js/dat.gui.js"></script>
 
 <script src="resources/js/index.js" type="text/javascript"></script>
+<script src="resources/js/photo.js" type="text/javascript"></script>
+<script src="resources/js/pointerLock.js" type="text/javascript"></script>
+<script src="resources/js/PointerLockControls.js" type="text/javascript"></script>
+<script src="resources/js/datGUI.js" type="text/javascript"></script>
+<script src="resources/js/DragDropUpload.js" type="text/javascript"></script>
+<script src="resources/js/WebGL.js" type="text/javascript"></script>
 <link rel="stylesheet" href="resources/css/index.css" />
+
 
 </head>
 <body>
@@ -39,9 +46,10 @@
 		<p><code>Drag and Drop New Photos In</code></p>
 		
 		<p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
+		<button onclick="initPointerLock();">Lock it!</button>
 	</div>
 	
-	
+	<div id="pointer-lock-element"></div>
 
 	
 </div>

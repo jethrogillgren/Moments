@@ -62,7 +62,7 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	@Transactional
 	//@ResponseBody
-	public void save(Photo3 photo, MultipartFile file) {
+	public Photo3 save(Photo3 photo, MultipartFile file) {
 		logger.info( "PhotoDaoImpl.save(Photo2)  id:" + photo.getId() + "  name:" + photo.getImageName() + "   fileName: " + file.getOriginalFilename() );
 		Session sess = sessionFactory.getCurrentSession();
 		try {
@@ -75,6 +75,7 @@ public class PhotoDaoImpl implements PhotoDao {
         }
 		
 		sess.save( photo );
+		return photo;
 	}
 	
 	

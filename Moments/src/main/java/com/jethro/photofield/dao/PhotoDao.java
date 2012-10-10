@@ -9,7 +9,7 @@ public interface PhotoDao {
 	public List<Integer> getIds();
 	public Photo3 get( Integer id );
 	
-	public void save( Photo3 photo, MultipartFile file );
+	public Photo3 save( Photo3 photo, MultipartFile file );
 	
 	public void update(Photo3 photo);
 	

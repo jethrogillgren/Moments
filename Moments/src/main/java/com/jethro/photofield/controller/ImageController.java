@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Locale;
@@ -155,11 +156,23 @@ public class ImageController {
 	 */
 	@RequestMapping(value = "/Image", method = RequestMethod.POST)
 	@ResponseBody
-	public String create( @Valid Photo3 photo, BindingResult result,
-				@RequestParam("images") MultipartFile file) {
+	public void create( @Valid Photo3 photo, BindingResult result,
+				@RequestParam("images") MultipartFile file,
+				HttpServletResponse response) {
 		logger.info("POST /Image :  imageName:" + photo.getImageName() + " File Length " + file.getSize() );
-		//photoDao.save( photo, file );
-		return "{success:true}";
+		photo = photoDao.save( photo, file );
+		
+		String resp = "{\"success\":true, \"id\":" + photo.getId() + "}";
+		response.setContentType( "application/json" );
+		PrintWriter writer;
+		try {
+			writer = response.getWriter();
+			writer.print( resp );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**

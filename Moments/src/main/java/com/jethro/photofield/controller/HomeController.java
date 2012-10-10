@@ -49,7 +49,7 @@ public class HomeController {
 		
 		//model.addAttribute("photoToUpdate", photoDao.get( modelid ) );
 
-		return "draganddroptest";
+		return "FPStest";
 	}
 	
 }
