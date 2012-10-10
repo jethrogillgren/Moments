@@ -47,27 +47,6 @@ function onWindowResize() {
 }
 
 
-function onDocumentMouseClick(event) {
-	logObj( "onDocumentMouseClick", event );
-	
-	event.preventDefault();
-	
-    var mouse3D = new THREE.Vector3(
-   		(event.clientX / window.innerWidth) * 2 - 1,
-    	-(event.clientY / window.innerHeight) * 2 + 1,
-    	0.5
-    );
-    
-    var projector = new THREE.Projector();
-    projector.unprojectVector(mouse3D, camera);
-    
-    var ray = new THREE.Ray( camera.position, mouse3D.subSelf(camera.position).normalize() );
-	var intersects = ray.intersectObjects( getAllPhotoObjects() );
-	if ( intersects.length > 0 ) {
-		selectPhotoByMesh( intersects[0].object );
-	}
-}
-
 
 function logObj( Str, Obj) {
 	console.log( Str + ' :' );
