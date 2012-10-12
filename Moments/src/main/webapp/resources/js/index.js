@@ -12,11 +12,6 @@ var havePointerLock = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||
     'webkitPointerLockElement' in document;
 
-
-//TODO Handle Unsupported Browsers
-//if (!THREE.Detector.webgl)
-//	THREE.Detector.addGetWebGLMessage();
-
 $(document).ready(function() {
 	
 	$('#help-modal-content').modal();
