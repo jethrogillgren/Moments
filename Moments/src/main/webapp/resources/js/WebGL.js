@@ -2,7 +2,7 @@
 
 var camera, scene;
 var controls;
-var controlsLastPosition = new THREE.Vector3( -500, -10, 800 );
+var controlsLastPosition = new THREE.Vector3( -500, 0, 800 );
 var controlsLastRotation = new THREE.Vector3( 0, -0.4, 0 );
 var webglRenderer;
 var mesh, zmesh, geometry, ray;
@@ -16,9 +16,30 @@ function initWebGL() {
 	//Create Camera
 	camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
 	
-	
     //Create scene
     scene = new THREE.Scene();
+    
+    // Grid
+	var size = 5000, step = 100;
+	
+	var geometry = new THREE.Geometry();
+	
+	for ( var i = - size; i <= size; i += step ) {
+
+		geometry.vertices.push( new THREE.Vector3( - size, 0, i ) );
+		geometry.vertices.push( new THREE.Vector3(   size, 0, i ) );
+
+		geometry.vertices.push( new THREE.Vector3( i, 0, - size ) );
+		geometry.vertices.push( new THREE.Vector3( i, 0,   size ) );
+
+	}
+
+	var material = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.5 } );
+	
+	var line = new THREE.Line( geometry, material );
+	line.type = THREE.LinePieces;
+	line.position.set(0, -60, 0);
+	scene.add( line );
     
 	// LIGHTS
 	var ambient = new THREE.AmbientLight( 0x221100 );
@@ -59,7 +80,7 @@ function getCameraObject() {
 
 //Remove the current Controls Object
 function disableCurrentControls() {
-	DEBUG("Disabling Current Controls");
+	TRACE("Disabling Current Controls");
 	
 	controls.disableControls();
 	scene.remove( controls.getObject() );

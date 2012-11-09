@@ -80,7 +80,7 @@ function createPhotoByXml( xmlRep ) {
 	//var rotationArr = getXYZArrFromString( $(xmlRep).find('rotation').text() );
 	var positionVector = getVector3DFromString( $(xmlRep).find('position').text() );
 	var rotationVector = getVector3DFromString( $(xmlRep).find('rotation').text() );
-	var scaleArr = getVector3DFromString( $(xmlRep).find('scale').text() );
+	var scaleVector = getVector3DFromString( $(xmlRep).find('scale').text() );
 	
 	//Create the inner Canvas object for the Mesh
 	var canvas = document.createElement( "canvas" );
@@ -105,7 +105,7 @@ function createPhotoByXml( xmlRep ) {
 		//photoMesh.rotation.set( rotationArr[0], rotationArr[1], rotationArr[2] );
 		photoMesh.position = positionVector;
 		photoMesh.rotation = rotationVector;
-		photoMesh.scale.set( scaleArr[0], scaleArr[1], scaleArr[2] );
+		photoMesh.scale = scaleVector;
 		photoMesh.photoId = id;
 		photoMesh.Title = imageName;
 		photoMesh.Caption = imageCaption;

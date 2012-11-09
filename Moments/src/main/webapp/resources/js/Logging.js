@@ -1,4 +1,4 @@
-var logLevel = "1";
+var logLevel = "2";
 //1 TRACE
 //2 DEBUG
 //3 INFO

@@ -58,7 +58,7 @@ function enterFreeMode() {
 	scene.add( controls.getObject() );
 	
 	$(window).bind("PointerLocked", function(event, theData) {
-		console.log( "PointerLocked Event caught in FreeMode" );
+		TRACE( "PointerLocked Event caught in FreeMode" );
 		controls.enableControls();
 	});
 	
