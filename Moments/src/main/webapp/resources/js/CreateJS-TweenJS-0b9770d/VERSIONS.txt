@@ -1,0 +1,25 @@
+Version 0.3.0 [Aug 27, 2012]
+****************************************************************************************************
+- moved all class definitions into a configurable "createjs" namespace
+- fix for a race condition that can arise when one tween causes others to be removed
+- added Tween.hasActiveTweens(target)
+- fixed issue with minified version of code being dependent on Ticker
+- fixed issue with unpausing tweens after adding & removing from a Timeline
+- added .onChange() to Tween & Timeline
+- added .position to Tween & Timeline
+- added Tween.target
+
+
+Version 0.2.0 [Apr 13, 2012] 
+****************************************************************************************************
+- implemented a plugin model, and moved CSS support to CSSPlugin
+- Timeline now forces its useTicks setting on child tweens
+- can set paused & position in config props
+- fix for negative positions in tweens
+- added Timeline.resolve()
+- minor bug fixes and doc updates
+
+
+Version 0.1.0 [Nov 28, 2011]
+****************************************************************************************************
+Initial release.

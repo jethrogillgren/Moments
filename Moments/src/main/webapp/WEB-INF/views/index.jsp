@@ -15,10 +15,16 @@
 
 <script type="text/javascript" src="resources/js/dat.gui.js"></script>
 
+<script src="resources/js/TweenLite.min.js"></script>
+<script src="resources/js/EasePack.min.js"></script>
+
+<script src="resources/js/Logging.js" type="text/javascript"></script>
 <script src="resources/js/index.js" type="text/javascript"></script>
 <script src="resources/js/photo.js" type="text/javascript"></script>
 <script src="resources/js/pointerLock.js" type="text/javascript"></script>
-<script src="resources/js/PointerLockControls.js" type="text/javascript"></script>
+<script src="resources/js/IndexModeControls.js" type="text/javascript"></script>
+<script src="resources/js/FreeModeControls.js" type="text/javascript"></script>
+<script src="resources/js/PhotoModeControls.js" type="text/javascript"></script>
 <script src="resources/js/datGUI.js" type="text/javascript"></script>
 <script src="resources/js/DragDropUpload.js" type="text/javascript"></script>
 <script src="resources/js/WebGL.js" type="text/javascript"></script>
@@ -46,7 +52,7 @@
 		<p><code>Drag and Drop New Photos In</code></p>
 		
 		<p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
-		<button onclick="initPointerLock();">Lock it!</button>
+		<button onclick="enterFreeMode();">Enter Free Mode!</button>
 	</div>
 	
 	<div id="pointer-lock-element"></div>
