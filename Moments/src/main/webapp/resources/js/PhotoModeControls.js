@@ -43,7 +43,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 			y:targetPhoto.position.y,
 			z:targetPhoto.position.z,
 			
-			ease:Linear.easeNone,
+			ease:Power4.easeOut,
 			onComplete:TweenComplete
 		});
 		rotationTween = new TweenLite(posObject.rotation, 2, {
@@ -51,7 +51,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 			y:targetPhoto.rotation.y,
 			z:targetPhoto.rotation.z,
 			
-			ease:Linear.easeNone,
+			ease:Power4.easeOut,
 			onComplete:TweenComplete
 		});
 		
@@ -93,7 +93,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		
 		DEBUG( "PhotoModeControls.onMouseClick:", event );
 		
-		var DatGuiHeight = $(".dg.main.a").height() + 25;
+		var DatGuiHeight = $(".dg.main.a").height();
 		var DatGuiWidth = $(".dg.main.a").width() + 20;
 		
 		if( event.clientX > window.innerWidth - DatGuiWidth  &&  event.clientY < DatGuiHeight ) {
@@ -123,7 +123,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		cameraRef.position.x += ( mouseX - cameraRef.position.x ) * .05;
 		cameraRef.position.y += ( - mouseY - cameraRef.position.y ) * .05;
 		
-		cameraRef.position.z = 300;
+		cameraRef.position.z = 600;
 		
 		cameraRef.lookAt( targetPhoto.position );
 	};

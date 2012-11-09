@@ -6,7 +6,7 @@ function initPhotos() {
 
 //Update this Photo on the Server
 function updatePhoto( photo) {
-	TRACE( 'Updating Photo', photo );
+	DEBUG( 'Updating Photo', photo );
 	
 	photoRepresentation = getRepresentationFromPhotoMesh( photo );
 	//var dataStr = "id=1&imageName=Test&imageCaption=Test&position=0, 0, 0&rotation=0, 0, 0&scale=5, 5, 5";
@@ -29,9 +29,9 @@ function getRepresentationFromPhotoMesh( photo ) {
 	results.id = photo.photoId;
 	results.imageName = photo.Title;
 	results.imageCaption = photo.Caption;
-	results.position = photo.position.x[0] + ', ' +photo.position.y[0] + ', ' +photo.position.z[0] + ', ';
-	results.rotation = photo.rotation.x[0] + ', ' +photo.rotation.y[0] + ', ' +photo.rotation.z[0] + ', ';
-	results.scale = photo.scale.x[0] + ', ' +photo.scale.y[0] + ', ' +photo.scale.z[0] + ', ';
+	results.position = photo.position.x + ', ' +photo.position.y + ', ' +photo.position.z + ', ';
+	results.rotation = photo.rotation.x + ', ' +photo.rotation.y + ', ' +photo.rotation.z + ', ';
+	results.scale = photo.scale.x + ', ' +photo.scale.y + ', ' +photo.scale.z + ', ';
 	
 	return results;
 }

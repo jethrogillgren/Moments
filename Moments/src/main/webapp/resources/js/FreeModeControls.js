@@ -132,6 +132,7 @@ var FreeModeControls = function ( camera ) {
 		return yawObject;
 	};
 	
+	
 	this.enableControls = function() {
 		
 		document.addEventListener( 'mousemove', controls.onMouseMove, false );
@@ -144,7 +145,7 @@ var FreeModeControls = function ( camera ) {
 		yawObject.position = controlsLastPosition;
 		yawObject.rotation = controlsLastRotation;
 		
-		INFO( "Enabling Free Mode Controls: ", yawObject );
+		INFO( "Enabled Free Mode Controls: ", yawObject );
 	};
 	this.disableControls = function() {
 		
@@ -156,13 +157,13 @@ var FreeModeControls = function ( camera ) {
 		controllsEnabled = false;
 		
 		controlsLastPosition = yawObject.position;
-		controlsLastRotation = yawObject.rotation;
+		//controlsLastRotation = yawObject.rotation;
 		
-		/*controlsLastRotation = new THREE.Vector3(
+		controlsLastRotation = new THREE.Vector3(
 	    	pitchObject.rotation.x,
 	    	yawObject.rotation.y,
 	    	0
-	    );*/
+	    );
 	    
 	    DEBUG( "Disabling FreeModeControls" );
 	};
