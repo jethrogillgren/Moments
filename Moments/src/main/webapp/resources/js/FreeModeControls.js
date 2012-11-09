@@ -157,15 +157,15 @@ var FreeModeControls = function ( camera ) {
 		controllsEnabled = false;
 		
 		controlsLastPosition = yawObject.position;
-		//controlsLastRotation = yawObject.rotation;
+		controlsLastRotation = yawObject.rotation;
 		
-		controlsLastRotation = new THREE.Vector3(
+		/*controlsLastRotation = new THREE.Vector3(
 	    	pitchObject.rotation.x,
 	    	yawObject.rotation.y,
 	    	0
-	    );
+	    );*/
 	    
-	    DEBUG( "Disabling FreeModeControls" );
+	    INFO( "Disabling FreeModeControls - controlsLastPosition: " + controlsLastPosition.x + " " + controlsLastPosition.y + " " + controlsLastPosition.z + "  controlsLastRotation: " + controlsLastRotation.x + " " + controlsLastRotation.y + " " + controlsLastRotation.z );
 	};
 
 	this.update = function ( delta ) {

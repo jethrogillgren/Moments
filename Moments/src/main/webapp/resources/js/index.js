@@ -17,8 +17,6 @@ var havePointerLock = 'pointerLockElement' in document ||
 
 $(document).ready(function() {
 	
-	TRACE( "Document.ready()" );
-	
 	initWebGL();
 	
 	initPhotos();
@@ -131,5 +129,5 @@ function onWindowResize() {
 
 
 function logObj( Str, Obj) {
-	DEBUG(Str, Obj);
+	ERROR(Str, Obj);
 }

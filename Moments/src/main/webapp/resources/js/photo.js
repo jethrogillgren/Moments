@@ -138,6 +138,5 @@ function getVector3DFromString( str ) {
  	
  	var vec = new THREE.Vector3( pos[0], pos[1], pos[2] );
  	
- 	TRACE("Got Vector3 from String: ",vec );
 	return vec;
 }

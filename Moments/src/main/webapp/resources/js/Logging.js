@@ -1,4 +1,4 @@
-var logLevel = "2";
+var logLevel = "1";
 //1 TRACE
 //2 DEBUG
 //3 INFO
@@ -17,26 +17,26 @@ function TRACE( Str, Obj ) {
 function DEBUG( Str, Obj ) {
 	
 	if ( logLevel < 3 ) {
-		console.log( "DEBUG   " + Str );
+		console.info( "DEBUG   " + Str );
 		if( Obj )
-			console.dir( Obj );
+			console.info( Obj );
 	}
 }
 
 function INFO( Str, Obj ) {
 	
 	if ( logLevel < 4 ) {
-		console.log( "INFO    " + Str );
+		console.warn( "INFO    " + Str );
 		if( Obj )
-			console.dir( Obj );
+			console.warn( Obj );
 	}
 }
 
 function ERROR( Str, Obj ) {
 	
-	console.log( "\nERROR   " + Str );
+	console.error( "\nERROR   " + Str );
 	if( Obj )
-		console.dir( Obj );
+		console.error( Obj );
 	
 	console.log("\n");
 }

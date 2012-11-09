@@ -8,7 +8,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	//camera.position = new THREE.Vector3( 0, 0, 0 );
 	//camera.rotation = new THREE.Vector3( 0, 0, 0 );
 	posObject.add( camera );
-	logObj("Set PhotoModeControls posObject to:", posObject);
+	TRACE("Set PhotoModeControls posObject to:", posObject);
 	
 	var targetPhoto = newTargetPhoto;
 	TRACE("Set PhotoModeControls Target Photo to:", targetPhoto);
@@ -32,8 +32,8 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		
 		controllsEnabled = true;
 		
-		logObj( "Photo Camera Object: ", posObject );
-		
+		TRACE( "Photo Camera Object: ", posObject );
+		/*
 		console.log( "Moving to X Position: ", targetPhoto.position.x );
 		console.log( "Moving to Y Position: ", targetPhoto.position.y );
 		console.log( "Moving to Z Position: ", targetPhoto.position.z );
@@ -57,7 +57,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		
 		document.addEventListener( 'mousemove', photoModeMouseMove, false );
 		document.addEventListener( 'click', PhotoModeClickHandler, false );
-		
+		*/
 		openDatGuiForPhoto( targetPhoto )
 		
 		INFO( "Enabled PhotoModeControls: ", posObject );
@@ -115,7 +115,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	
 
 	this.update = function ( delta ) {
-		
+		/*
 		if ( controllsEnabled != true ) return;
 		
 		var cameraRef = posObject.children[0];
@@ -125,7 +125,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		
 		cameraRef.position.z = 600;
 		
-		cameraRef.lookAt( targetPhoto.position );
+		cameraRef.lookAt( targetPhoto.position );*/
 	};
 
 };
