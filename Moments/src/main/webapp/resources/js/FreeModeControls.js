@@ -5,16 +5,6 @@ var FreeModeControls = function ( camera ) {
 	
 	var controllsEnabled = false;
 	
-	var photoViewDistance = 500;
-	
-	var pitchObject = new THREE.Object3D();
-	pitchObject.add( camera );
-	pitchObject.children[0].position = new THREE.Vector3( 0, 0, 0 );
-	pitchObject.children[0].rotation = new THREE.Vector3( 0, 0, 0 );
-	
-	var yawObject = new THREE.Object3D();
-	yawObject.add( pitchObject );
-	
 	var moveForward = false;
 	var moveBackward = false;
 	var moveLeft = false;
@@ -142,9 +132,6 @@ var FreeModeControls = function ( camera ) {
 		
 		controllsEnabled = true;
 		
-		yawObject.position = controlsLastPosition;
-		yawObject.rotation = controlsLastRotation;
-		
 		INFO( "Enabled Free Mode Controls: ", yawObject );
 	};
 	this.disableControls = function() {
@@ -155,17 +142,8 @@ var FreeModeControls = function ( camera ) {
 		document.removeEventListener( 'click', controls.onMouseClick, false );
 		
 		controllsEnabled = false;
-		
-		controlsLastPosition = yawObject.position;
-		controlsLastRotation = yawObject.rotation;
-		
-		/*controlsLastRotation = new THREE.Vector3(
-	    	pitchObject.rotation.x,
-	    	yawObject.rotation.y,
-	    	0
-	    );*/
 	    
-	    INFO( "Disabling FreeModeControls - controlsLastPosition: " + controlsLastPosition.x + " " + controlsLastPosition.y + " " + controlsLastPosition.z + "  controlsLastRotation: " + controlsLastRotation.x + " " + controlsLastRotation.y + " " + controlsLastRotation.z );
+	    INFO( "Disabled FreeModeControls" );
 	};
 
 	this.update = function ( delta ) {

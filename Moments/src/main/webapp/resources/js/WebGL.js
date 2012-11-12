@@ -1,9 +1,11 @@
 //Core WebGL Three.js Stuff.  Setting up the scene and renderer.
 
 var camera, scene;
+
 var controls;
-var controlsLastPosition = new THREE.Vector3( -500, 0, 800 );
-var controlsLastRotation = new THREE.Vector3( 0, -0.4, 0 );
+var pitchObject
+var yawObject;
+
 var webglRenderer;
 var mesh, zmesh, geometry, ray;
 var objects = [];
@@ -13,8 +15,15 @@ var time = Date.now();
 function initWebGL() {
 	TRACE( "Initilizing WebGL" );
 	
-	//Create Camera
+	//Create Camera Control Object
 	camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+	
+	pitchObject = new THREE.Object3D();
+	pitchObject.add( camera );
+	
+	yawObject = new THREE.Object3D();
+	yawObject.add( pitchObject );
+	
 	
     //Create scene
     scene = new THREE.Scene();
@@ -75,17 +84,7 @@ function initWebGL() {
 
 //Returns whichever Camera we are currently using (Free or Photo)
 function getCameraObject() {
-	return controls.getObject();
-}
-
-//Remove the current Controls Object
-function disableCurrentControls() {
-	TRACE("Disabling Current Controls");
-	
-	controls.disableControls();
-	scene.remove( controls.getObject() );
-	controls = null;
-	scene.add(camera); //Put the camera back into the scene
+	return yawObject;
 }
 
 
@@ -94,6 +93,7 @@ function animate() {
 	requestAnimationFrame( animate );
 	
 	if( controls != null ) { //If we have a controlling object (*ModeControls.js)
+		
 		controls.update( Date.now() - time ); //Tell it to perform it's updates
 	}
 	webglRenderer.render( scene, camera );

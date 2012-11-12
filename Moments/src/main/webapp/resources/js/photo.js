@@ -70,7 +70,7 @@ function createPhotoById( id ) {
 
 //Turns the Photos XML Representation into a Three.Mesh, and adds it to the scene
 function createPhotoByXml( xmlRep ) {
-	TRACE( 'createPhotoByXml', xmlRep );
+	TRACE( 'createPhotoByXml' );
 	
 	//Get the Metadata from the XML Representation
 	var id = $(xmlRep).find('id').text();

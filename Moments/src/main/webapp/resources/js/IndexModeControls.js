@@ -4,31 +4,21 @@ var IndexModeControls = function ( camera ) {
 	
 	var controllsEnabled = false;
 	
-	var posObject = new THREE.Object3D();
-	posObject.add( camera );
-	
-	
 	//Public access to the Camera Objects
 	this.getObject = function () {
-		return posObject;
+		return yawObject;
 	};
 	
 	this.enableControls = function() {
 		
 		controllsEnabled = true;
 		
-		posObject.position = controlsLastPosition;
-		posObject.rotation = controlsLastRotation;
-		
-		INFO( "Enabled IndexModeControls: ", posObject );
+		INFO( "Enabled IndexModeControls: ", yawObject );
 	};
 	
 	this.disableControls = function() {
 		
 		controllsEnabled = false;
-		
-		//controlsLastPosition = posObject.position;
-		//controlsLastRotation = posObject.rotation;
 		
 		DEBUG( "Disabled IndexModeControls" );
 	};

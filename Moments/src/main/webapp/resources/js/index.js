@@ -85,29 +85,23 @@ function enterPhotoMode( thePhoto ) {
 
 //Exit the current Mode. Called before entering a new mode.
 function exitCurrentMode() {
-	TRACE( "Exiting Current Mode" );
+	TRACE( "Exiting Previous Mode" );
 	
-	if( currentMode=="Index" ) {
-		$.modal.close();
+	if( controls != null ) {
+		if( currentMode=="Index" ) {
+			$.modal.close();
+			
+		} else if ( currentMode=="Free" ) {
+			
+			$(window).unbind('PointerLocked');
+			$(window).unbind('PointerUnlocked');
+			killPointerLock();
+			
+		} else if ( currentMode=="Photo" ) {
+			//Nothing Special
+		}
 		
-		disableCurrentControls();
-		
-	} else if ( currentMode=="Free" ) {
-		
-		disableCurrentControls();
-		
-		$(window).unbind('PointerLocked');
-		$(window).unbind('PointerUnlocked');
-		killPointerLock();
-		
-	} else if ( currentMode=="Photo" ) {
-
-		disableCurrentControls();
-		
-		PhotoModeSelectedPhoto = null;
-		//document.removeEventListener( 'click', PhotoModeClickHandler, false );
-		
-		
+		controls.disableControls();
 	}
 }
 

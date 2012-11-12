@@ -1,44 +1,64 @@
+//These controls zoom the Control Objects to the target photo, and move the camera object itself depending on mouse move.
+//Returns camera object back to 000, 000 when disabled.
 
 var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	TRACE("PhotoModeControls Created");
 	
 	var controllsEnabled = false;
 	
-	var posObject = new THREE.Object3D();
-	//camera.position = new THREE.Vector3( 0, 0, 0 );
-	//camera.rotation = new THREE.Vector3( 0, 0, 0 );
-	posObject.add( camera );
-	TRACE("Set PhotoModeControls posObject to:", posObject);
-	
 	var targetPhoto = newTargetPhoto;
 	TRACE("Set PhotoModeControls Target Photo to:", targetPhoto);
 	
 	var positionTween;
-	var rotationTween;
+	var yawTween;
+	var pitchTween;
+	var tweenState = "Inactive";
+	
+	var cameraDisabledTween; //USed when we disable these controls.  Puts the control objects in a nice position
+	var positionCamTween;
+	var rotationCamTween;
+	
 	
 	var mouseX = 0, mouseY = 0;
 	
 	//Public access to the Camera Objects
 	this.getObject = function () {
-		return posObject;
+		return yawObject;
 	};
 	
 	
 	this.enableControls = function() {
 		
-		
-		posObject.position = controlsLastPosition;
-		posObject.rotation = controlsLastRotation;
-		
 		controllsEnabled = true;
 		
-		TRACE( "Photo Camera Object: ", posObject );
-		/*
-		console.log( "Moving to X Position: ", targetPhoto.position.x );
-		console.log( "Moving to Y Position: ", targetPhoto.position.y );
-		console.log( "Moving to Z Position: ", targetPhoto.position.z );
+		TRACE( "Photo Camera Object: ", yawObject );
 		
-		positionTween = new TweenLite(posObject.position, 2, {
+		//TRACE( "Moving to X Position: ", targetPhoto.position.x );
+		//TRACE( "Moving to Y Position: ", targetPhoto.position.y );
+		//TRACE( "Moving to Z Position: ", targetPhoto.position.z );
+		
+		
+		
+		
+		/*
+		targetPhoto.updateMatrixWorld();
+		targetPhoto.updateMatrix();
+		yawObject.updateMatrixWorld();
+		yawObject.updateMatrix();
+		pitchObject.updateMatrixWorld();
+		pitchObject.updateMatrix();*/
+		
+		INFO( "Target Photo rotation: ", targetPhoto.rotation );
+		INFO( "yawObject rotation: ", yawObject.rotation );
+		INFO( "pitchObject rotation: ", pitchObject.rotation );
+		
+		//yawObject.rotation = targetPhoto.rotation.clone();
+		//yawObject.position = targetPhoto.position.clone();
+		
+		
+		
+		tweenState = "Active";
+		positionTween = new TweenLite(yawObject.position, 2, {
 			x:targetPhoto.position.x,
 			y:targetPhoto.position.y,
 			z:targetPhoto.position.z,
@@ -46,10 +66,14 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 			ease:Power4.easeOut,
 			onComplete:TweenComplete
 		});
-		rotationTween = new TweenLite(posObject.rotation, 2, {
-			x:targetPhoto.rotation.x,
+		yawTween = new TweenLite(yawObject.rotation, 1, {
 			y:targetPhoto.rotation.y,
-			z:targetPhoto.rotation.z,
+			
+			ease:Power4.easeOut,
+			onComplete:TweenComplete
+		});
+		pitchTween = new TweenLite(pitchObject.rotation, 1, {
+			x:targetPhoto.rotation.x,
 			
 			ease:Power4.easeOut,
 			onComplete:TweenComplete
@@ -57,20 +81,46 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		
 		document.addEventListener( 'mousemove', photoModeMouseMove, false );
 		document.addEventListener( 'click', PhotoModeClickHandler, false );
-		*/
+		
+		
 		openDatGuiForPhoto( targetPhoto )
 		
-		INFO( "Enabled PhotoModeControls: ", posObject );
+		INFO( "Enabled PhotoModeControls: ", yawObject );
 	};
 	this.disableControls = function() {
 		
-		controlsLastPosition = posObject.position.addSelf( posObject.children[0].position );
-		controlsLastRotation = posObject.rotation.addSelf( posObject.children[0].rotation );
-		
 		controllsEnabled = false;
 		
+		//If we were still tweening in, cancel!
 		positionTween.kill();
-		rotationTween.kill();
+		yawTween.kill();
+		pitchTween.kill();
+		tweenState = "Inactive";
+		
+		
+		//Move the Control object by a vector of the cameras local position
+		cameraDisabledTween = new TweenLite(yawObject.position, 0.5, {
+			x:camera.position.x,
+			y:camera.position.y,
+			z:camera.position.z,
+			
+			ease:Power4.easeOut,
+			onComplete:TweenComplete
+		});
+		
+		//Tween the camera back to 000, 000
+		positionCamTween = new TweenLite(camera.position, 0.5, {
+			x:0, y:0, z:0,
+			
+			ease:Power4.easeOut,
+			onComplete:TweenComplete
+		});
+		rotationCamTween = new TweenLite(camera.rotation, 0.5, {
+			x:0, y:0, z:0,
+			
+			ease:Power4.easeOut,
+			onComplete:TweenComplete
+		});
 		
 		document.removeEventListener( 'mousemove', photoModeMouseMove, false );
 		document.removeEventListener( 'click', PhotoModeClickHandler, false );
@@ -109,23 +159,24 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	
 	
 	function TweenComplete() {
-		DEBUG( "Tween Completed on posObject: ", posObject );
-	
+		TRACE( "Tween Completed " );
+		tweenState = "Completed";
 	}
 	
 
 	this.update = function ( delta ) {
-		/*
+		
 		if ( controllsEnabled != true ) return;
 		
-		var cameraRef = posObject.children[0];
+		camera.position.x += ( mouseX - camera.position.x ) * .05;
+		camera.position.y += ( - mouseY - camera.position.y ) * .05;
 		
-		cameraRef.position.x += ( mouseX - cameraRef.position.x ) * .05;
-		cameraRef.position.y += ( - mouseY - cameraRef.position.y ) * .05;
+		camera.rotation.x -= ( mouseX - camera.position.x ) * .0005;
+		camera.rotation.y += ( - mouseY - camera.position.y ) * .0005;
 		
-		cameraRef.position.z = 600;
+		camera.position.z = 600;
 		
-		cameraRef.lookAt( targetPhoto.position );*/
+		camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
 	};
 
 };
