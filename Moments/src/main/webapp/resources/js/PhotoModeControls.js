@@ -12,7 +12,6 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	var positionTween;
 	var yawTween;
 	var pitchTween;
-	var tweenState = "Inactive";
 	
 	var cameraDisabledTween; //USed when we disable these controls.  Puts the control objects in a nice position
 	var positionCamTween;
@@ -26,38 +25,11 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		return yawObject;
 	};
 	
-	
-	this.enableControls = function() {
-		
-		controllsEnabled = true;
-		
-		TRACE( "Photo Camera Object: ", yawObject );
-		
+	function tweenToTarget() {
 		//TRACE( "Moving to X Position: ", targetPhoto.position.x );
 		//TRACE( "Moving to Y Position: ", targetPhoto.position.y );
 		//TRACE( "Moving to Z Position: ", targetPhoto.position.z );
 		
-		
-		
-		
-		/*
-		targetPhoto.updateMatrixWorld();
-		targetPhoto.updateMatrix();
-		yawObject.updateMatrixWorld();
-		yawObject.updateMatrix();
-		pitchObject.updateMatrixWorld();
-		pitchObject.updateMatrix();*/
-		
-		INFO( "Target Photo rotation: ", targetPhoto.rotation );
-		INFO( "yawObject rotation: ", yawObject.rotation );
-		INFO( "pitchObject rotation: ", pitchObject.rotation );
-		
-		//yawObject.rotation = targetPhoto.rotation.clone();
-		//yawObject.position = targetPhoto.position.clone();
-		
-		
-		
-		tweenState = "Active";
 		positionTween = new TweenLite(yawObject.position, 2, {
 			x:targetPhoto.position.x,
 			y:targetPhoto.position.y,
@@ -78,25 +50,14 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 			ease:Power4.easeOut,
 			onComplete:TweenComplete
 		});
-		
-		document.addEventListener( 'mousemove', photoModeMouseMove, false );
-		document.addEventListener( 'click', PhotoModeClickHandler, false );
-		
-		
-		openDatGuiForPhoto( targetPhoto )
-		
-		INFO( "Enabled PhotoModeControls: ", yawObject );
 	};
-	this.disableControls = function() {
-		
-		controllsEnabled = false;
-		
+	
+	function tweenFromTarget() {
+	
 		//If we were still tweening in, cancel!
 		positionTween.kill();
 		yawTween.kill();
 		pitchTween.kill();
-		tweenState = "Inactive";
-		
 		
 		//Move the Control object by a vector of the cameras local position
 		cameraDisabledTween = new TweenLite(yawObject.position, 0.5, {
@@ -121,6 +82,26 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 			ease:Power4.easeOut,
 			onComplete:TweenComplete
 		});
+	};
+	
+	this.enableControls = function() {
+		
+		controllsEnabled = true;
+		
+		tweenToTarget();
+		
+		document.addEventListener( 'mousemove', photoModeMouseMove, false );
+		document.addEventListener( 'click', PhotoModeClickHandler, false );
+		
+		openDatGuiForPhoto( targetPhoto )
+		
+		INFO( "Enabled PhotoModeControls: ", yawObject );
+	};
+	this.disableControls = function() {
+		
+		controllsEnabled = false;
+		
+		tweenFromTarget();
 		
 		document.removeEventListener( 'mousemove', photoModeMouseMove, false );
 		document.removeEventListener( 'click', PhotoModeClickHandler, false );
@@ -160,7 +141,6 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	
 	function TweenComplete() {
 		TRACE( "Tween Completed " );
-		tweenState = "Completed";
 	}
 	
 
@@ -177,6 +157,10 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		camera.position.z = 600;
 		
 		camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+		
+		if ( !targetPhoto.position.equals( yawObject.position ) ) {
+			tweenToTarget(); //TODO  Check efficiency of reinitializing the tween every frame!
+		}
 	};
 
 };
