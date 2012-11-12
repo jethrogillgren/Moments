@@ -71,12 +71,11 @@ function openDatGuiForPhoto( photo ) {
 		updatePhoto( photo );
 	});
 	
-	var rotationMin = -3.14;
-	var rotationMax = 3.14;
+	var Pi = 3.14;
 	var rotationStep = 0.01;
 	
 	photo.XRotation = parseAndRoundFloat( photo.rotation.x );
-	var rotationX = datGui.add( photo, 'XRotation' ).min(rotationMin).max(rotationMax).step(rotationStep);
+	var rotationX = datGui.add( photo, 'XRotation' ).min(-Pi/2).max(Pi/2).step(rotationStep);
 	rotationX.onChange(function(value) {
 		value =  parseAndRoundFloat( value );
 		photo.rotation.setX( value ); //Workaround
@@ -89,7 +88,7 @@ function openDatGuiForPhoto( photo ) {
 	});
 	
 	photo.YRotation = parseAndRoundFloat( photo.rotation.y );
-	var rotationY = datGui.add( photo, 'YRotation' ).min(rotationMin).max(rotationMax).step(rotationStep);
+	var rotationY = datGui.add( photo, 'YRotation' ).min(-Pi).max(Pi).step(rotationStep);
 	rotationY.onChange(function(value) {
 		value =  parseAndRoundFloat( value );
 		photo.rotation.setY( value ); //Workaround
@@ -102,7 +101,7 @@ function openDatGuiForPhoto( photo ) {
 	});
 	
 	photo.ZRotation = parseAndRoundFloat( photo.rotation.z );
-	var rotationZ = datGui.add( photo, 'ZRotation' ).min(rotationMin).max(rotationMax).step(rotationStep);
+	var rotationZ = datGui.add( photo, 'ZRotation' ).min(-Pi/2).max(Pi/2).step(rotationStep);
 	rotationZ.onChange(function(value) {
 		value =  parseAndRoundFloat( value );
 		photo.rotation.setZ( value ); //Workaround

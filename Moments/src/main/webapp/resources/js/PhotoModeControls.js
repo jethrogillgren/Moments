@@ -140,7 +140,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 	
 	
 	function TweenComplete() {
-		TRACE( "Tween Completed " );
+		TRACE( "Tween Completed" );
 	}
 	
 
