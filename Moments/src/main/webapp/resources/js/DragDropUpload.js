@@ -1,12 +1,13 @@
 function initDragDrop() {
 	TRACE( "Initializing Drag & Drop" );
 	var dropBox = document.getElementById( 'DragDropImg' );
-	dropBox.addEventListener('dragenter', onDrag, false);
-	dropBox.addEventListener('dragover', onDrag, false);
-	dropBox.addEventListener('dragleave', onDrag, false);
-	dropBox.addEventListener('drop', onDrop, false);
+	window.addEventListener('dragenter', onDrag, false);
+	window.addEventListener('dragover', onDrag, false);
+	window.addEventListener('dragleave', onDrag, false);
+	window.addEventListener('drop', onDrop, false);
 }
 function onDrag(e) {
+	TRACE("Dragging...");
  	e.stopPropagation();
   	e.preventDefault();
 }

@@ -27,8 +27,8 @@ function openDatGuiForPhoto( photo ) {
 		updatePhoto( photo );
 	});
 	
-	var positionMin = -1000;
-	var positionMax = 1000;
+	var positionMin = -5000;
+	var positionMax = 5000;
 	var positionStep = 0.1;
 	
 	photo.XPosition = parseAndRoundFloat( photo.position.x );
@@ -113,8 +113,9 @@ function openDatGuiForPhoto( photo ) {
 		updatePhoto( photo );
 	});
 	
+	
 	photo.Scale = parseAndRoundFloat( photo.scale.x );
-	var scale = datGui.add( photo, 'Scale' ).min(0.5).max(3).step(0.01);
+	var scale = datGui.add( photo, 'Scale' ).min(0.1).max(5).step(0.01);
 	scale.onChange(function(value) {
 		value =  parseAndRoundFloat( value );
 		photo.scale.setX( value ); //Workaround

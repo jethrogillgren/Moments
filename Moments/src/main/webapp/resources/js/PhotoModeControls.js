@@ -143,7 +143,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		TRACE( "Tween Completed" );
 	}
 	
-
+	
 	this.update = function ( delta ) {
 		
 		if ( controllsEnabled != true ) return;
@@ -154,7 +154,7 @@ var PhotoModeControls = function ( camera, newTargetPhoto ) {
 		camera.rotation.x -= ( mouseX - camera.position.x ) * .0005;
 		camera.rotation.y += ( - mouseY - camera.position.y ) * .0005;
 		
-		camera.position.z = 600;
+		camera.position.z = 1000;
 		
 		camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
 		
